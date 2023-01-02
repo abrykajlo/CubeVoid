@@ -1,5 +1,5 @@
 add_library(Render STATIC)
-target_include_directories(Render PRIVATE .. ${GLAD_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS})
+target_include_directories(Render PRIVATE .. ${GLAD_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS} ${ASSIMP_INCLUDE_DIRS})
 target_sources(Render
     PUBLIC
         camera.cpp

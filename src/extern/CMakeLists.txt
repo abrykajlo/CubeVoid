@@ -15,3 +15,9 @@ FetchContent_Declare(glfw
 )
 FetchContent_MakeAvailable(glfw)
 set(GLFW_INCLUDE_DIRS "${GLFW_SOURCE_DIR}/include" PARENT_SCOPE)
+
+# assimp
+FetchContent_Declare(assimp
+    GIT_REPOSITORY https://github.com/assimp/assimp.git
+)
+FetchContent_MakeAvailable(assimp)

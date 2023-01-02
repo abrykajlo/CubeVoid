@@ -7,6 +7,7 @@ target_link_libraries(CubeVoid
     OpenGL::GL
     glad
     glfw
+    assimp
 )
 target_include_directories(CubeVoid PRIVATE ../..)
 target_compile_features(CubeVoid PUBLIC cxx_std_17)

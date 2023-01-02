@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <istream>
+#include <assimp>
 
 Mesh::Mesh() {}
 
