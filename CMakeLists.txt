@@ -3,7 +3,7 @@ project(CubeVoid)
 
 find_package(OpenGL REQUIRED)
 
-add_subdirectory(src/extern)
+add_subdirectory(src-extern)
 add_subdirectory(src/core)
 add_subdirectory(src/render)
 add_subdirectory(src/simulation)

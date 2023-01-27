@@ -1,3 +1,3 @@
 # Build Instructions
 
-Call `./configure.sh`
+Call `make build`

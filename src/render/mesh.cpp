@@ -99,7 +99,6 @@ Parse(std::basic_istream<char>& is, Mesh& mesh)
         nextChar = is.get();
         switch (nextChar) {
             case 'v':
-                vert.n = { 0, 0, 0 };
                 is >> vert.v.x;
                 is >> vert.v.y;
                 is >> vert.v.z;
