@@ -8,3 +8,4 @@ target_sources(Render
         shader_program.cpp
         shader.cpp
 )
+target_link_libraries(Render PRIVATE glad::glad)

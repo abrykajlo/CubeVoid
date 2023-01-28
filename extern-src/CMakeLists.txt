@@ -1,0 +1,7 @@
+# GLAD
+set(GLAD_PROFILE "core")
+set(GLAD_ALL_EXTENSIONS ON)
+find_package(glad CONFIG REQUIRED GLOBAL)
+
+# GLFW
+find_package(glfw3 CONFIG REQUIRED GLOBAL)

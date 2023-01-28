@@ -1,2 +1,3 @@
 add_library(Simulation STATIC simulation.cpp)
-target_include_directories(Simulation PRIVATE .. ${GLAD_INCLUDE_DIRS} ${GLFW_INCLUDE_DIRS})
+target_include_directories(Simulation PRIVATE ..)
+target_link_libraries(Simulation PRIVATE glad::glad)
