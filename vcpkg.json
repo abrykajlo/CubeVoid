@@ -5,6 +5,7 @@
     "description": "personal rendering engine project",
     "dependencies": [
         "glfw3",
-        "glad"
+        "glad",
+        "catch2"
     ]
 }

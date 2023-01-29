@@ -7,19 +7,15 @@
 #include "render.h"
 
 #include <core/file.h>
+#include <core/math.h>
 #include <core/quat.h>
 #include <render/shader_program.h>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <cmath>
 #include <cstring>
 #include <sstream>
-
-#ifdef WIN32
-#define M_PI 3.14159265358979323846264
-#endif
 
 static void
 error_callback(int error, const char* description)
