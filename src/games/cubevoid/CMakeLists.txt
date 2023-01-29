@@ -1,12 +1,13 @@
 add_executable(CubeVoid main.cpp)
 
-target_link_libraries(CubeVoid 
-    Core 
-    Render 
-    Simulation
-    OpenGL::GL
-    glad
-    glfw
+target_link_libraries(
+    CubeVoid
+    PRIVATE 
+        Core 
+        Render 
+        Simulation
+        glad::glad
+        glfw
 )
 target_include_directories(CubeVoid PRIVATE ../..)
 target_compile_features(CubeVoid PUBLIC cxx_std_17)

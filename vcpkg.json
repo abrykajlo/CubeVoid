@@ -1,0 +1,10 @@
+{
+    "name": "cubevoid",
+    "version-string": "0.1.0",
+    "port-version": 2,
+    "description": "personal rendering engine project",
+    "dependencies": [
+        "glfw3",
+        "glad"
+    ]
+}
