@@ -5,3 +5,6 @@ find_package(glad CONFIG REQUIRED GLOBAL)
 
 # GLFW
 find_package(glfw3 CONFIG REQUIRED GLOBAL)
+
+# Catch2
+find_package(Catch2 CONFIG REQUIRED GLOBAL)
