@@ -6,19 +6,20 @@
 
 #include "camera.h"
 
-Camera::Camera()
-{
-    eye = { 0, 1, 1 };
-    at = { 0, 0, 0 };
-    up = { 0, 1, 0 };
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
 
-    m_projection = { 0.1f, 0, 0, 0, 0, 0.1f, 0, 0, 0, 0, 0.1f, 0, 0, 0, 0, 1 };
-}
+Camera::Camera()
+    : eye(0, 1, 1)
+    , at(0, 0, 0)
+    , up(0, 1, 0)
+    , m_projection(glm::frustum(-5.f, 5.f, -5.f, 5.f, 0.f, 10.f))
+{}
 
 Camera::~Camera() {}
 
 mat4
 Camera::ViewProjection()
 {
-    return m_projection * LookAt(eye, at, up);
+    return m_projection * glm::lookAt(eye, at, up);
 }
