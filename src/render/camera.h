@@ -6,10 +6,8 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
-
-using glm::mat4;
-using glm::vec3;
+#include <core/mat.h>
+#include <core/vec.h>
 
 class Camera
 {

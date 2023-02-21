@@ -1,6 +1,9 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include <core/mat.h>
 #include <core/math.h>
+#include <core/quat.h>
+#include <core/vec.h>
 
 TEST_CASE("Quaternion can rotate vectors", "[quaternion]")
 {
