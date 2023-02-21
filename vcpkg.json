@@ -4,9 +4,8 @@
     "port-version": 2,
     "description": "personal rendering engine project",
     "dependencies": [
-        "glad",
         "glfw3",
-        "glm",
+        "glad",
         "catch2"
     ]
 }

@@ -26,11 +26,11 @@ Mesh::Init()
                  &m_vertices[0],
                  GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, v));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(
-        1, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, n));
+        1, 3, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)sizeof(vec3));
     glEnableVertexAttribArray(1);
 
     glGenBuffers(1, &m_vio);
@@ -99,6 +99,7 @@ Parse(std::basic_istream<char>& is, Mesh& mesh)
         nextChar = is.get();
         switch (nextChar) {
             case 'v':
+                vert.n = { 0, 0, 0 };
                 is >> vert.v.x;
                 is >> vert.v.y;
                 is >> vert.v.z;
@@ -109,9 +110,12 @@ Parse(std::basic_istream<char>& is, Mesh& mesh)
                 is >> p;
                 is >> q;
                 is >> r;
-                indices.push_back(--p);
-                indices.push_back(--q);
-                indices.push_back(--r);
+                p--;
+                q--;
+                r--;
+                indices.push_back(p);
+                indices.push_back(q);
+                indices.push_back(r);
                 break;
         }
     }

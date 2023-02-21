@@ -1,4 +1,3 @@
-add_library(Simulation STATIC)
+add_library(Simulation STATIC simulation.cpp)
 target_include_directories(Simulation PRIVATE ..)
-target_sources(Simulation PUBLIC simulation.cpp simulation.h)
 target_link_libraries(Simulation PRIVATE glad::glad)

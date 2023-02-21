@@ -8,13 +8,11 @@
 
 #include <core/file.h>
 #include <core/math.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/rotate_vector.hpp>
+#include <core/quat.h>
 #include <render/shader_program.h>
 
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include <cstring>
 #include <sstream>
@@ -116,17 +114,18 @@ RenderManager::Render()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // rotate at 1 rotation every x seconds
-        float fractionOfFullRotation = secondsPerRotation / timeSinceLast;
-        float rad = 2.f * M_PI / fractionOfFullRotation;
+        auto fractionOfFullRotation = secondsPerRotation / timeSinceLast;
+        float rad = 2.0f * M_PI / fractionOfFullRotation;
+        auto rot = quat_rotation(rad, 0, 1, 0);
 
-        vec3& eye = m_mainCamera.eye;
-        eye = glm::rotateY(eye, rad);
+        auto& eye = m_mainCamera.eye;
+        eye = (rot * quat(eye) * rot.Inverse()).ToVec3();
 
         // set eye
-        glUniform3fv(1, 1, glm::value_ptr(eye));
+        glUniform3fv(1, 1, (GLfloat*)&eye);
         // set camera projection
         mat4 projection = m_mainCamera.ViewProjection();
-        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(0, 1, GL_TRUE, (GLfloat*)&projection);
 
         m_mesh.Draw();
         glfwSwapBuffers(m_window);
@@ -139,16 +138,18 @@ int
 RenderManager::InitShaders()
 {
     m_log->Write("Initializing Shaders\n");
-    DefaultReadFile vertShaderFile;
-    if (vertShaderFile.Open("./assets/shaders/shader.vert") < 0) {
-        m_log->Write("Failed to open vertex shader file\n");
-        return -1;
-    }
-    DefaultReadFile fragShaderFile;
-    if (fragShaderFile.Open("./assets/shaders/shader.frag") < 0) {
-        m_log->Write("Failed to open fragment shader file\n");
-        return -1;
-    }
+	DefaultReadFile vertShaderFile; 
+	if (vertShaderFile.Open("./assets/shaders/shader.vert") < 0)
+	{
+		m_log->Write("Failed to open vertex shader file\n");
+		return -1;
+	}
+	DefaultReadFile fragShaderFile; 
+	if (fragShaderFile.Open("./assets/shaders/shader.frag") < 0)
+	{
+		m_log->Write("Failed to open fragment shader file\n");
+		return -1;
+	}
 
     Shader vertShader(VERTEX_SHADER);
     Shader fragShader(FRAGMENT_SHADER);
