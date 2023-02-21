@@ -13,7 +13,7 @@ Camera::Camera()
     : eye(0, 1, 1)
     , at(0, 0, 0)
     , up(0, 1, 0)
-    , m_projection(glm::frustum(-5.f, 5.f, -5.f, 5.f, 0.f, 10.f))
+    , m_projection(glm::scale(glm::mat4(1), glm::vec3(0.1, 0.1, 0.1)))
 {}
 
 Camera::~Camera() {}
@@ -21,5 +21,5 @@ Camera::~Camera() {}
 mat4
 Camera::ViewProjection()
 {
-    return m_projection * glm::lookAt(eye, at, up);
+    return m_projection * glm::lookAtLH(eye, at, up);
 }

@@ -1,6 +1,9 @@
 add_library(Core)
 target_include_directories(Core PRIVATE ..)
 target_sources(Core
-    PRIVATE
+    PUBLIC
         log.cpp
+        log.h
+        math.h
+        util.h
 )

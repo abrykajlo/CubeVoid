@@ -7,6 +7,7 @@
 #include "render.h"
 
 #include <core/file.h>
+#include <core/math.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -125,7 +126,7 @@ RenderManager::Render()
         glUniform3fv(1, 1, glm::value_ptr(eye));
         // set camera projection
         mat4 projection = m_mainCamera.ViewProjection();
-        glUniformMatrix4fv(0, 1, GL_TRUE, glm::value_ptr(projection));
+        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projection));
 
         m_mesh.Draw();
         glfwSwapBuffers(m_window);
