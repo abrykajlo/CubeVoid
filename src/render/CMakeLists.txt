@@ -1,11 +1,16 @@
 add_library(Render STATIC)
-target_include_directories(Render PRIVATE ..)
+target_include_directories(Render PRIVATE .. ${GLM_INCLUDE_DIRS})
 target_sources(Render
     PUBLIC
         camera.cpp
+        camera.h
         mesh.cpp
+        mesh.h
         render.cpp
+        render.h
         shader_program.cpp
+        shader_program.h
         shader.cpp
+        shader.h
 )
 target_link_libraries(Render PRIVATE glad::glad)
