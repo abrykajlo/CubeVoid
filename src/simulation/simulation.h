@@ -14,6 +14,9 @@ class SimulationManager
 
     static SimulationManager& GetInstance();
     int Run();
+
+  private:
+    bool m_done = false;
 };
 
 int

@@ -1,5 +1,5 @@
 add_library(Render STATIC)
-target_include_directories(Render PRIVATE .. ${GLM_INCLUDE_DIRS})
+target_include_directories(Render PRIVATE .. ${GLM_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR})
 target_sources(Render
     PUBLIC
         camera.cpp
@@ -13,4 +13,8 @@ target_sources(Render
         shader.cpp
         shader.h
 )
-target_link_libraries(Render PRIVATE glad::glad)
+target_link_libraries(Render 
+    PRIVATE 
+        glad::glad 
+        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+)

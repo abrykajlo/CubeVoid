@@ -31,4 +31,7 @@ class Mesh
 };
 
 bool
-Parse(std::basic_istream<char>& is, Mesh& mesh);
+ParseObj(std::basic_istream<char>& is, Mesh& mesh);
+
+void
+MakeCube(Mesh& mesh, float size);

@@ -17,12 +17,14 @@ class Camera
     Camera();
     ~Camera();
 
-    mat4 ViewProjection();
+    mat4 View();
+    mat4 Projection();
 
-    vec3 eye;
-    vec3 up;
-    vec3 at;
 
   private:
+    vec3 m_eye;
+    vec3 m_up;
+    vec3 m_at;
+
     mat4 m_projection;
 };

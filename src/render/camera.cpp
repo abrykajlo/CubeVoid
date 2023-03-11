@@ -10,16 +10,22 @@
 #include <glm/ext/matrix_clip_space.hpp>
 
 Camera::Camera()
-    : eye(0, 1, 1)
-    , at(0, 0, 0)
-    , up(0, 1, 0)
-    , m_projection(glm::scale(glm::mat4(1), glm::vec3(0.1, 0.1, 0.1)))
+    : m_eye(1, 2, 2)
+    , m_at(0, 0, 0)
+    , m_up(0, 1, 0)
+    , m_projection(glm::perspective(glm::radians(45.0f), 640.f/480, 0.1f, 100.f))
 {}
 
 Camera::~Camera() {}
 
 mat4
-Camera::ViewProjection()
+Camera::View()
 {
-    return m_projection * glm::lookAtLH(eye, at, up);
+    return glm::lookAt(m_eye, m_at, m_up);
+}
+
+mat4
+Camera::Projection()
+{
+    return m_projection;
 }

@@ -7,15 +7,9 @@
 #include <render/render.h>
 #include <simulation/simulation.h>
 
-#include <GLFW/glfw3.h>
+#include <SDL.h>
 
 #include <memory>
-
-static void
-error_callback(int error, const char* description)
-{
-    fprintf(stderr, "Error: %s\n", description);
-}
 
 SimulationManager::SimulationManager() {}
 
@@ -35,8 +29,13 @@ int
 SimulationManager::Run()
 {
     auto& renderManager = RenderManager::GetInstance();
-    while (!renderManager.Done()) {
-        glfwPollEvents();
+    while (!m_done) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                m_done = true;
+            }
+        }
         renderManager.Render();
     }
 
@@ -46,8 +45,7 @@ SimulationManager::Run()
 int
 BigInit()
 {
-    glfwSetErrorCallback(error_callback);
-    if (!glfwInit()) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         return -1;
     }
 
@@ -61,11 +59,11 @@ BigInit()
 int
 BigQuit()
 {
+    SDL_Quit();
+
     if (RenderManager::GetInstance().Quit() < 0) {
         return -1;
     }
-
-    glfwTerminate();
 
     return 0;
 }

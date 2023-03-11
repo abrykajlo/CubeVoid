@@ -9,6 +9,10 @@
 #include <algorithm>
 #include <istream>
 
+static constexpr int k_cube_faces = 6;
+static constexpr int k_indices_per_face = 6;
+static constexpr int k_vertices_per_face = 4;
+
 Mesh::Mesh() {}
 
 Mesh::~Mesh() {}
@@ -74,7 +78,7 @@ Mesh::add_indices(std::vector<GLuint>&& is)
 }
 
 bool
-Parse(std::basic_istream<char>& is, Mesh& mesh)
+ParseObj(std::basic_istream<char>& is, Mesh& mesh)
 {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
@@ -120,4 +124,101 @@ Parse(std::basic_istream<char>& is, Mesh& mesh)
     mesh.add_indices(std::move(indices));
 
     return true;
+}
+
+void
+MakeCube(Mesh& mesh, float edge)
+{
+    float half = edge / 2;
+    constexpr int cube_vertices_count = k_cube_faces * k_vertices_per_face;
+    const vec3 cube_points[cube_vertices_count] = {
+        // right face
+        { half, half, half },
+        { half, -half, half },
+        { half, -half, -half },
+        { half, half, -half },
+
+        // top face
+        { half, half, half },
+        { half, half, -half },
+        { -half, half, -half },
+        { -half, half, half },
+
+        // left face
+        { -half, -half, -half },
+        { -half, -half, half },
+        { -half, half, half },
+        { -half, half, -half },
+
+        // bottom face
+        { -half, -half, -half },
+        { half, -half, -half },
+        { half, -half, half },
+        { -half, -half, half },
+
+        // front face
+        { half, half, half },
+        { -half, half, half },
+        { -half, -half, half },
+        { half, -half, half },
+
+        // back face
+        { -half, -half, -half },
+        { half, -half, -half },
+        { half, half, -half },
+        { -half, half, -half },
+    };
+    const vec3 cube_normals[k_cube_faces] = {
+        // right normal
+        { 1, 0, 0 },
+
+        // top normal
+        { 0, 1, 0 },
+
+        // left normal
+        { -1, 0, 0 },
+
+        // bottom normal
+        { 0, -1, 0 },
+
+        // front normal
+        { 0, 0, 1 },
+
+        // back normal
+        { 0, 0, -1 },
+    };
+
+    std::vector<Vertex> vertices;
+    vertices.reserve(24);
+    for (size_t face = 0; face < k_cube_faces; face++) {
+        int base_index = face * k_vertices_per_face;
+
+        vertices.emplace_back(Vertex{
+            cube_points[base_index + 0], cube_normals[face] });
+        vertices.emplace_back(Vertex{
+            cube_points[base_index + 1], cube_normals[face] });
+        vertices.emplace_back(Vertex{
+            cube_points[base_index + 2], cube_normals[face] });
+        vertices.emplace_back(Vertex{
+            cube_points[base_index + 3], cube_normals[face] });
+    }
+
+    std::vector<GLuint> indices;
+    indices.reserve(36);
+    for (size_t face = 0; face < k_cube_faces; face++) {
+        GLuint base_index = face * 4;
+
+        // triangle 1
+        indices.push_back(base_index + 0);
+        indices.push_back(base_index + 1);
+        indices.push_back(base_index + 2);
+
+        // triangle 2
+        indices.push_back(base_index + 0);
+        indices.push_back(base_index + 2);
+        indices.push_back(base_index + 3);
+    }
+
+    mesh.add_indices(std::move(indices));
+    mesh.add_vertices(std::move(vertices));
 }

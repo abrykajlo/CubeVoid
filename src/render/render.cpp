@@ -7,14 +7,15 @@
 #include "render.h"
 
 #include <core/file.h>
+#include <core/log.h>
 #include <core/math.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/rotate_vector.hpp>
 #include <render/shader_program.h>
 
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <cstring>
 #include <sstream>
@@ -45,60 +46,73 @@ RenderManager::Init()
     m_log = std::make_unique<Log>("RenderManager.log");
 
     // open window
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    m_window = glfwCreateWindow(640, 480, "CubeVoid", nullptr, nullptr);
-    if (m_window == nullptr) {
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+                        SDL_GL_CONTEXT_PROFILE_CORE);
+    m_window = SDL_CreateWindow("CubeVoid",
+                                SDL_WINDOWPOS_CENTERED,
+                                SDL_WINDOWPOS_CENTERED,
+                                640,
+                                480,
+                                SDL_WINDOW_OPENGL);
+    if (!m_window) {
         return -1;
     }
 
-    glfwMakeContextCurrent(m_window);
-    glfwSwapInterval(1);
+    m_context = SDL_GL_CreateContext(m_window);
+    if (!m_context) {
+        return -1;
+    }
+
+    SDL_GL_SetSwapInterval(1);
     m_log->Write("GLFW Success\n");
     // init glew and check for success
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
         m_log->Write("GLAD failed to initialize\n");
         return -1;
     }
     m_log->Write("GLAD initialized\n");
 
     glViewport(0, 0, 640, 480);
-    glClearColor(0, 0, 0, 1);
-    m_initialized = true;
+    glClearColor(0.5, 0.5, 0.5, 1);
 
     if (InitShaders() < 0) {
         m_log->Write("Failed to initialize shaders\n");
         return -1;
     }
     m_log->Write("Shaders initialized\n");
-    // not sure if this is the right place for this
+
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
 
-    DefaultReadFile meshFile;
-    meshFile.Open("./assets/models/dragon.obj");
+    // DefaultReadFile meshFile;
+    // meshFile.Open("./assets/models/dragon.obj");
 
-    auto size = meshFile.Size();
-    char* fileContents = new char[size];
-    meshFile.Read(fileContents, size);
-    std::istringstream fileContentStream(std::string(fileContents, size));
+    // auto size = meshFile.Size();
+    // char* fileContents = new char[size];
+    // meshFile.Read(fileContents, size);
+    // std::istringstream fileContentStream(std::string(fileContents, size));
 
-    if (!Parse(fileContentStream, m_mesh)) {
-        m_log->Write("unable to parse file");
-        return -1;
-    }
-    delete[] fileContents;
+    // if (!Parse(fileContentStream, m_mesh)) {
+    //     m_log->Write("unable to parse file");
+    //     return -1;
+    // }
+    // delete[] fileContents;
+    MakeCube(m_mesh, 1.0f);
     m_mesh.Init();
 
     m_lastTime = m_clock.now();
+    m_initialized = true;
+
     return 0;
 }
 
 int
 RenderManager::Quit()
 {
-    glfwDestroyWindow(m_window);
+    SDL_DestroyWindow(m_window);
     m_mesh.Quit();
     return 0;
 }
@@ -115,21 +129,20 @@ RenderManager::Render()
         // clear buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // rotate at 1 rotation every x seconds
-        float fractionOfFullRotation = secondsPerRotation / timeSinceLast;
-        float rad = 2.f * M_PI / fractionOfFullRotation;
+        // set camera view
+        mat4 view = m_mainCamera.View();
+        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(view));
 
-        vec3& eye = m_mainCamera.eye;
-        eye = glm::rotateY(eye, rad);
+        // set projection
+        mat4 proj = m_mainCamera.Projection();
+        glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(proj));
 
-        // set eye
-        glUniform3fv(1, 1, glm::value_ptr(eye));
-        // set camera projection
-        mat4 projection = m_mainCamera.ViewProjection();
-        glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projection));
+        // set normal matrix
+        glm::mat3 normMat = glm::inverseTranspose(glm::mat3(view));
+        glUniformMatrix3fv(2, 1, GL_FALSE, glm::value_ptr(normMat));
 
         m_mesh.Draw();
-        glfwSwapBuffers(m_window);
+        SDL_GL_SwapWindow(m_window);
         m_lastTime = now;
     }
     return 0;
@@ -140,12 +153,12 @@ RenderManager::InitShaders()
 {
     m_log->Write("Initializing Shaders\n");
     DefaultReadFile vertShaderFile;
-    if (vertShaderFile.Open("./assets/shaders/shader.vert") < 0) {
+    if (vertShaderFile.Open("./assets/shaders/vertex.glsl") < 0) {
         m_log->Write("Failed to open vertex shader file\n");
         return -1;
     }
     DefaultReadFile fragShaderFile;
-    if (fragShaderFile.Open("./assets/shaders/shader.frag") < 0) {
+    if (fragShaderFile.Open("./assets/shaders/fragment.glsl") < 0) {
         m_log->Write("Failed to open fragment shader file\n");
         return -1;
     }

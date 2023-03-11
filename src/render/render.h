@@ -6,16 +6,16 @@
 
 #pragma once
 
-#include <core/log.h>
 #include <render/camera.h>
 #include <render/mesh.h>
 
-#include <GLFW/glfw3.h>
+#include <SDL.h>
 
 #include <chrono>
 #include <memory>
 
 class GLFWwindow;
+class Log;
 class ShaderProgram;
 class RenderManager
 {
@@ -29,10 +29,10 @@ class RenderManager
     int Quit();
 
     int Render();
-    inline bool Done() { return glfwWindowShouldClose(m_window); }
 
   private:
-    GLFWwindow* m_window = nullptr;
+    SDL_Window* m_window = nullptr;
+    SDL_GLContext m_context = nullptr;
     bool m_initialized = false;
     std::unique_ptr<Log> m_log;
     std::unique_ptr<ShaderProgram> m_shaderProgram;
