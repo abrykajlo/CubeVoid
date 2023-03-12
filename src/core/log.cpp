@@ -8,6 +8,8 @@
 
 #include <cstdio>
 
+using namespace cv;
+
 Log::Log(const char* fileName)
 {
     m_file.Open(fileName);

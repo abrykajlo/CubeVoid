@@ -10,6 +10,7 @@
 
 #include <string>
 
+namespace cv {
 enum ShaderType
 {
     VERTEX_SHADER = 0,
@@ -37,3 +38,4 @@ class Shader
     GLuint m_shaderId;
     std::string m_error;
 };
+}

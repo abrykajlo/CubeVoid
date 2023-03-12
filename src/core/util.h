@@ -6,6 +6,7 @@
 
 #pragma once
 
+namespace cv {
 template<class DataT>
 struct Node
 {
@@ -33,3 +34,4 @@ inline Node<DataT>::Node(DataT data, Node* next)
     : data(data)
     , next(next)
 {}
+}

@@ -13,6 +13,8 @@ static constexpr int k_cube_faces = 6;
 static constexpr int k_indices_per_face = 6;
 static constexpr int k_vertices_per_face = 4;
 
+using namespace cv;
+
 Mesh::Mesh() {}
 
 Mesh::~Mesh() {}
@@ -78,7 +80,7 @@ Mesh::add_indices(std::vector<GLuint>&& is)
 }
 
 bool
-ParseObj(std::basic_istream<char>& is, Mesh& mesh)
+cv::ParseObj(std::basic_istream<char>& is, Mesh& mesh)
 {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
@@ -127,7 +129,7 @@ ParseObj(std::basic_istream<char>& is, Mesh& mesh)
 }
 
 void
-MakeCube(Mesh& mesh, float edge)
+cv::MakeCube(Mesh& mesh, float edge)
 {
     float half = edge / 2;
     constexpr int cube_vertices_count = k_cube_faces * k_vertices_per_face;

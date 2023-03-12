@@ -12,6 +12,7 @@
 #include <array>
 #include <memory>
 
+namespace cv {
 class ShaderProgram
 {
   public:
@@ -29,3 +30,4 @@ class ShaderProgram
     GLuint m_programId;
     std::string m_error;
 };
+}

@@ -9,6 +9,8 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 
+using namespace cv;
+
 Camera::Camera()
     : m_eye(1, 2, 2)
     , m_at(0, 0, 0)

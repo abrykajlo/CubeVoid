@@ -6,6 +6,8 @@ add_subdirectory(src/core)
 add_subdirectory(src/render)
 add_subdirectory(src/simulation)
 
+add_subdirectory(src/engine)
+
 add_subdirectory(src/games/cubevoid)
 
 add_subdirectory(src/tests)

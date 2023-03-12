@@ -11,6 +11,7 @@
 using glm::mat4;
 using glm::vec3;
 
+namespace cv {
 class Camera
 {
   public:
@@ -28,3 +29,4 @@ class Camera
 
     mat4 m_projection;
 };
+}

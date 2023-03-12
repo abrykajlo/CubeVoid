@@ -6,20 +6,17 @@
 
 #pragma once
 
+#include <engine/clock.h>
+
+namespace cv {
 class SimulationManager
 {
   public:
     SimulationManager();
     ~SimulationManager();
 
-    static SimulationManager& GetInstance();
-    int Run();
-
-  private:
-    bool m_done = false;
+    int Init();
+    int Quit();
+    int Update(Clock::DurationT deltaTime);
 };
-
-int
-BigInit();
-int
-BigQuit();
+}

@@ -4,19 +4,20 @@
 ** Written by Adam Brykajlo <adam.brykajlo@gmail.com>, June 2017
 */
 
-#include <simulation/simulation.h>
+#include "cubevoid.h"
 
 int
 main(int argc, char** argv)
 {
+    CubeVoidGame game;
     // Initialize and catch errors
-    if (BigInit() < 0) {
+    if (game.Init() < 0) {
         return -1;
     }
     // run main loop
-    SimulationManager::GetInstance().Run();
+    game.Run();
     // Quit and catch errors
-    if (BigQuit() < 0) {
+    if (game.Quit() < 0) {
         return -1;
     }
     return 0;

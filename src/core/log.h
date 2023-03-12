@@ -10,6 +10,7 @@
 
 #include <cstdio>
 
+namespace cv {
 class Log
 {
   public:
@@ -21,3 +22,4 @@ class Log
   private:
     DefaultWriteFile m_file;
 };
+}

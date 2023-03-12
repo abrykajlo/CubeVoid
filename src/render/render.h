@@ -15,6 +15,8 @@
 #include <memory>
 
 class GLFWwindow;
+
+namespace cv {
 class Log;
 class ShaderProgram;
 class RenderManager
@@ -22,8 +24,6 @@ class RenderManager
   public:
     RenderManager();
     ~RenderManager();
-
-    static RenderManager& GetInstance();
 
     int Init();
     int Quit();
@@ -43,3 +43,4 @@ class RenderManager
 
     int InitShaders();
 };
+}

@@ -7,6 +7,7 @@
 #include <istream>
 #include <vector>
 
+namespace cv {
 class Mesh
 {
   public:
@@ -35,3 +36,4 @@ ParseObj(std::basic_istream<char>& is, Mesh& mesh);
 
 void
 MakeCube(Mesh& mesh, float size);
+}

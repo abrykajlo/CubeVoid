@@ -20,25 +20,11 @@
 #include <cstring>
 #include <sstream>
 
-static void
-error_callback(int error, const char* description)
-{
-    fprintf(stderr, "Error: %s\n", description);
-}
+using namespace cv;
 
 RenderManager::RenderManager() {}
 
 RenderManager::~RenderManager() {}
-
-RenderManager&
-RenderManager::GetInstance()
-{
-    static std::unique_ptr<RenderManager> s_renderManager = nullptr;
-    if (s_renderManager == nullptr) {
-        s_renderManager = std::make_unique<RenderManager>();
-    }
-    return *s_renderManager.get();
-}
 
 int
 RenderManager::Init()

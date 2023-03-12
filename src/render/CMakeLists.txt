@@ -1,5 +1,5 @@
 add_library(Render STATIC)
-target_include_directories(Render PRIVATE .. ${GLM_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR})
+target_include_directories(Render PRIVATE .. ${GLM_INCLUDE_DIRS})
 target_sources(Render
     PUBLIC
         camera.cpp
