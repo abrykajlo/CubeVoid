@@ -8,7 +8,7 @@
 
 #include <cstdio>
 
-using namespace cv;
+using namespace cv::core;
 
 Log::Log(const char* fileName)
 {

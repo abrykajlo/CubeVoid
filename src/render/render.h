@@ -6,41 +6,43 @@
 
 #pragma once
 
+#include <engine/clock.h>
 #include <render/camera.h>
 #include <render/mesh.h>
 
+#include <entt/entt.hpp>
 #include <SDL.h>
 
-#include <chrono>
 #include <memory>
 
-class GLFWwindow;
-
 namespace cv {
+namespace core {
 class Log;
+}
+namespace render {
 class ShaderProgram;
 class RenderManager
 {
   public:
-    RenderManager();
+    RenderManager(entt::registry& registry);
     ~RenderManager();
 
     int Init();
     int Quit();
 
-    int Render();
+    int Render(const engine::Clock::DurationT& deltaTime);
 
   private:
+    int InitShaders();
+    Camera GetMainCamera();
+    float GetAspectRatio();
+
     SDL_Window* m_window = nullptr;
     SDL_GLContext m_context = nullptr;
-    bool m_initialized = false;
-    std::unique_ptr<Log> m_log;
+    std::unique_ptr<core::Log> m_log;
     std::unique_ptr<ShaderProgram> m_shaderProgram;
-    Mesh m_mesh; // bring mesh out into simulation
-    Camera m_mainCamera;
-    std::chrono::high_resolution_clock m_clock;
-    std::chrono::time_point<decltype(m_clock)> m_lastTime;
-
-    int InitShaders();
+    entt::registry& m_EnTTRegistry;
+    engine::Clock::DurationT m_timeSinceLastRender;
 };
+}
 }

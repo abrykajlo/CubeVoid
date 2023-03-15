@@ -1,3 +1,3 @@
-add_executable(tests ../core/tests.cpp)
-target_include_directories(tests PRIVATE ..)
-target_link_libraries(tests PRIVATE Catch2::Catch2 Catch2::Catch2WithMain Core)
+add_executable(Tests ../core/tests.cpp)
+target_include_directories(Tests PRIVATE ${INCLUDE_DIRS})
+target_link_libraries(Tests PRIVATE Catch2::Catch2 Catch2::Catch2WithMain Core)

@@ -8,14 +8,21 @@
 
 #include <engine/clock.h>
 
+#include <entt/entt.hpp>
+
 #include <memory>
 
 class SDL_Window;
 
 namespace cv {
+namespace render {
 class RenderManager;
+}
+namespace sim {
 class SimulationManager;
+}
 
+namespace engine {
 class Game
 {
   public:
@@ -26,12 +33,12 @@ class Game
   protected:
     Game();
     virtual ~Game();
+    entt::registry m_EnTTRegistry;
 
   private:
-    SDL_Window* m_window;
-
     Clock m_clock;
-    std::unique_ptr<RenderManager> m_renderManager;
-    std::unique_ptr<SimulationManager> m_simulationManager;
+    std::unique_ptr<render::RenderManager> m_renderManager;
+    std::unique_ptr<sim::SimulationManager> m_simulationManager;
 };
+}
 }

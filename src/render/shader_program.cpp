@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-using namespace cv;
+using namespace cv::render;
 
 ShaderProgram::ShaderProgram()
     : m_shaders{ nullptr }

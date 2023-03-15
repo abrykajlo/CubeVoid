@@ -8,15 +8,24 @@
 
 #include <engine/clock.h>
 
+#include <entt/entt.hpp>
+
+#include <memory>
+
 namespace cv {
+namespace sim {
 class SimulationManager
 {
   public:
-    SimulationManager();
+    SimulationManager(entt::registry& registry);
     ~SimulationManager();
 
     int Init();
     int Quit();
-    int Update(Clock::DurationT deltaTime);
+    int Update(const engine::Clock::DurationT& deltaTime);
+
+  private:
+    entt::registry& m_EnTTRegistry;
 };
+}
 }

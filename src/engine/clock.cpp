@@ -1,6 +1,6 @@
 #include "clock.h"
 
-using namespace cv;
+using namespace cv::engine;
 
 Clock::Clock()
     : m_durations()
@@ -16,7 +16,9 @@ Clock::GetTimeDelta()
         averageDuration += duration;
     }
     averageDuration /= k_durationCount;
-    return averageDuration;
+    return averageDuration < std::chrono::seconds(1)
+               ? averageDuration
+               : std::chrono::milliseconds(30);
 }
 
 void

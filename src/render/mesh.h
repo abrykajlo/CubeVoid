@@ -8,6 +8,7 @@
 #include <vector>
 
 namespace cv {
+namespace render {
 class Mesh
 {
   public:
@@ -35,5 +36,6 @@ bool
 ParseObj(std::basic_istream<char>& is, Mesh& mesh);
 
 void
-MakeCube(Mesh& mesh, float size);
+MakeCube(Mesh& mesh);
+}
 }

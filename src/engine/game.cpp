@@ -5,7 +5,7 @@
 
 #include <SDL.h>
 
-using namespace cv;
+using namespace cv::engine;
 
 Game::Game() {}
 
@@ -18,12 +18,12 @@ Game::Init()
         return -1;
     }
 
-    m_renderManager = std::make_unique<RenderManager>();
+    m_renderManager = std::make_unique<render::RenderManager>(m_EnTTRegistry);
     if (m_renderManager->Init() < 0) {
         return -1;
     }
 
-    m_simulationManager = std::make_unique<SimulationManager>();
+    m_simulationManager = std::make_unique<sim::SimulationManager>(m_EnTTRegistry);
     if (m_simulationManager->Init() < 0) {
         return -1;
     }
@@ -59,7 +59,7 @@ Game::Run()
             }
         }
         m_simulationManager->Update(m_clock.GetTimeDelta());
-        m_renderManager->Render();
+        m_renderManager->Render(m_clock.GetTimeDelta());
         m_clock.Stop();
     }
     return 0;

@@ -4,6 +4,7 @@
 #include <array>
 
 namespace cv {
+namespace engine {
 class Clock
 {
   public:
@@ -13,7 +14,7 @@ class Clock
     using ClockT = std::chrono::high_resolution_clock;
     using TimeT = std::chrono::time_point<ClockT>;
     using DurationT = std::chrono::nanoseconds;
-    
+
     DurationT GetTimeDelta();
     void Start();
     void Stop();
@@ -26,4 +27,5 @@ class Clock
     std::array<DurationT, k_durationCount> m_durations;
     int m_currentDuration = 0;
 };
+}
 }

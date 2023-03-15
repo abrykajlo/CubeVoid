@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <core/util.h>
 #include <render/shader.h>
 
 #include <array>
 #include <memory>
 
 namespace cv {
+namespace render {
 class ShaderProgram
 {
   public:
@@ -25,9 +25,10 @@ class ShaderProgram
     const char* GetError();
 
   private:
-    std::array<std::unique_ptr<const Shader>, 6> m_shaders;
+    std::array<std::unique_ptr<const Shader>, ShaderType::COUNT> m_shaders;
 
     GLuint m_programId;
     std::string m_error;
 };
+}
 }

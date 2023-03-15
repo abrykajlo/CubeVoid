@@ -9,10 +9,12 @@
 #include <core/file.h>
 #include <core/log.h>
 #include <core/math.h>
+#include <render/components.h>
 #include <render/shader_program.h>
+#include <simulation/components.h>
 
+#include <entt/entt.hpp>
 #include <glad/glad.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -20,16 +22,18 @@
 #include <cstring>
 #include <sstream>
 
-using namespace cv;
+using namespace cv::render;
 
-RenderManager::RenderManager() {}
+RenderManager::RenderManager(entt::registry& registry)
+    : m_EnTTRegistry(registry)
+{}
 
 RenderManager::~RenderManager() {}
 
 int
 RenderManager::Init()
 {
-    m_log = std::make_unique<Log>("RenderManager.log");
+    m_log = std::make_unique<core::Log>("RenderManager.log");
 
     // open window
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -86,11 +90,6 @@ RenderManager::Init()
     //     return -1;
     // }
     // delete[] fileContents;
-    MakeCube(m_mesh, 1.0f);
-    m_mesh.Init();
-
-    m_lastTime = m_clock.now();
-    m_initialized = true;
 
     return 0;
 }
@@ -99,37 +98,40 @@ int
 RenderManager::Quit()
 {
     SDL_DestroyWindow(m_window);
-    m_mesh.Quit();
     return 0;
 }
 
 int
-RenderManager::Render()
+RenderManager::Render(const engine::Clock::DurationT& deltaTime)
 {
-    auto now = m_clock.now();
-    auto timeSinceLast = now - m_lastTime;
     std::chrono::milliseconds thirtyFPS(33);
     std::chrono::seconds secondsPerRotation(10);
 
-    if (timeSinceLast >= thirtyFPS) {
+    if (m_timeSinceLastRender >= thirtyFPS) {
+        m_timeSinceLastRender = engine::Clock::DurationT(0);
         // clear buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // set camera view
-        mat4 view = m_mainCamera.View();
+        Camera mainCamera = GetMainCamera();
+        mat4 view = mainCamera.View();
         glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(view));
 
         // set projection
-        mat4 proj = m_mainCamera.Projection();
+        mat4 proj = mainCamera.Projection();
         glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(proj));
 
         // set normal matrix
         glm::mat3 normMat = glm::inverseTranspose(glm::mat3(view));
         glUniformMatrix3fv(2, 1, GL_FALSE, glm::value_ptr(normMat));
 
-        m_mesh.Draw();
+        for (auto entity : m_EnTTRegistry.view<component::Mesh>()) {
+            m_EnTTRegistry.get<component::Mesh>(entity).mesh.Draw();
+        }
+
         SDL_GL_SwapWindow(m_window);
-        m_lastTime = now;
+    } else {
+        m_timeSinceLastRender += deltaTime;
     }
     return 0;
 }
@@ -184,4 +186,37 @@ RenderManager::InitShaders()
 
     m_shaderProgram->Use();
     return 0;
+}
+
+Camera
+RenderManager::GetMainCamera()
+{
+    float aspectRatio = GetAspectRatio();
+    entt::handle cameraEntity(m_EnTTRegistry,
+                              m_EnTTRegistry.view<component::MainCamera>()[0]);
+    const auto [camera, pos, rot] =
+        cameraEntity.try_get<component::MainCamera,
+                             sim::component::Position,
+                             sim::component::Rotation>();
+    Camera rendererCamera(
+        camera->fovy, aspectRatio, camera->zNear, camera->zFar);
+
+    if (pos) {
+        rendererCamera.SetEye(pos->position);
+    }
+
+    if (rot) {
+        rendererCamera.SetOrientation(rot->rotation);
+    }
+
+    return rendererCamera;
+}
+
+float
+RenderManager::GetAspectRatio()
+{
+    int w;
+    int h;
+    SDL_GetWindowSize(m_window, &w, &h);
+    return (float)w / h;
 }

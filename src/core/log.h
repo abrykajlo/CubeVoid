@@ -11,6 +11,7 @@
 #include <cstdio>
 
 namespace cv {
+namespace core {
 class Log
 {
   public:
@@ -22,4 +23,5 @@ class Log
   private:
     DefaultWriteFile m_file;
 };
+}
 }

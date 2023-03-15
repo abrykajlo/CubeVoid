@@ -13,7 +13,7 @@ static constexpr int k_cube_faces = 6;
 static constexpr int k_indices_per_face = 6;
 static constexpr int k_vertices_per_face = 4;
 
-using namespace cv;
+using namespace cv::render;
 
 Mesh::Mesh() {}
 
@@ -80,7 +80,7 @@ Mesh::add_indices(std::vector<GLuint>&& is)
 }
 
 bool
-cv::ParseObj(std::basic_istream<char>& is, Mesh& mesh)
+cv::render::ParseObj(std::basic_istream<char>& is, Mesh& mesh)
 {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
@@ -129,46 +129,45 @@ cv::ParseObj(std::basic_istream<char>& is, Mesh& mesh)
 }
 
 void
-cv::MakeCube(Mesh& mesh, float edge)
+cv::render::MakeCube(Mesh& mesh)
 {
-    float half = edge / 2;
     constexpr int cube_vertices_count = k_cube_faces * k_vertices_per_face;
     const vec3 cube_points[cube_vertices_count] = {
         // right face
-        { half, half, half },
-        { half, -half, half },
-        { half, -half, -half },
-        { half, half, -half },
+        { 0.5f, 0.5f, 0.5f },
+        { 0.5f, -0.5f, 0.5f },
+        { 0.5f, -0.5f, -0.5f },
+        { 0.5f, 0.5f, -0.5f },
 
         // top face
-        { half, half, half },
-        { half, half, -half },
-        { -half, half, -half },
-        { -half, half, half },
+        { 0.5f, 0.5f, 0.5f },
+        { 0.5f, 0.5f, -0.5f },
+        { -0.5f, 0.5f, -0.5f },
+        { -0.5f, 0.5f, 0.5f },
 
         // left face
-        { -half, -half, -half },
-        { -half, -half, half },
-        { -half, half, half },
-        { -half, half, -half },
+        { -0.5f, -0.5f, -0.5f },
+        { -0.5f, -0.5f, 0.5f },
+        { -0.5f, 0.5f, 0.5f },
+        { -0.5f, 0.5f, -0.5f },
 
         // bottom face
-        { -half, -half, -half },
-        { half, -half, -half },
-        { half, -half, half },
-        { -half, -half, half },
+        { -0.5f, -0.5f, -0.5f },
+        { 0.5f, -0.5f, -0.5f },
+        { 0.5f, -0.5f, 0.5f },
+        { -0.5f, -0.5f, 0.5f },
 
         // front face
-        { half, half, half },
-        { -half, half, half },
-        { -half, -half, half },
-        { half, -half, half },
+        { 0.5f, 0.5f, 0.5f },
+        { -0.5f, 0.5f, 0.5f },
+        { -0.5f, -0.5f, 0.5f },
+        { 0.5f, -0.5f, 0.5f },
 
         // back face
-        { -half, -half, -half },
-        { half, -half, -half },
-        { half, half, -half },
-        { -half, half, -half },
+        { -0.5f, -0.5f, -0.5f },
+        { 0.5f, -0.5f, -0.5f },
+        { 0.5f, 0.5f, -0.5f },
+        { -0.5f, 0.5f, -0.5f },
     };
     const vec3 cube_normals[k_cube_faces] = {
         // right normal

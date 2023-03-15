@@ -10,7 +10,7 @@
 
 #include <utility>
 
-using namespace cv;
+using namespace cv::render;
 
 Shader::Shader(ShaderType st)
     : m_shaderType(st)

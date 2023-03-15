@@ -4,13 +4,17 @@
 ** Written by Adam Brykajlo <adam.brykajlo@gmail.com>, June 2017
 */
 
-#include <simulation/simulation.h>
+#include "simulation.h"
+
+#include <entt/entt.hpp>
 
 #include <memory>
 
-using namespace cv;
+using namespace cv::sim;
 
-SimulationManager::SimulationManager() {}
+SimulationManager::SimulationManager(entt::registry& registry)
+    : m_EnTTRegistry(registry)
+{}
 
 SimulationManager::~SimulationManager() {}
 
@@ -27,7 +31,7 @@ SimulationManager::Quit()
 }
 
 int
-SimulationManager::Update(Clock::DurationT deltaTime)
+SimulationManager::Update(const engine::Clock::DurationT& deltaTime)
 {
     return 0;
 }

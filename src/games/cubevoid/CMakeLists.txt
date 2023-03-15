@@ -5,7 +5,7 @@ target_link_libraries(
     PRIVATE 
         Engine
 )
-target_include_directories(CubeVoid PRIVATE ../.. ${SDL2_INCLUDE_DIR})
+target_include_directories(CubeVoid PRIVATE ${INCLUDE_DIRS})
 target_sources(CubeVoid PRIVATE cubevoid.cpp cubevoid.h)
 target_compile_features(CubeVoid PUBLIC cxx_std_17)
 set_property(TARGET CubeVoid PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<TARGET_FILE_DIR:CubeVoid>)

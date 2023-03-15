@@ -11,14 +11,16 @@
 #include <string>
 
 namespace cv {
+namespace render {
 enum ShaderType
 {
-    VERTEX_SHADER = 0,
-    TESS_CONTROL_SHADER = 1,
-    TESS_EVALUATION_SHADER = 2,
-    GEOMETRY_SHADER = 3,
-    FRAGMENT_SHADER = 4,
-    COMPUTE_SHADER = 5
+    VERTEX_SHADER,
+    TESS_CONTROL_SHADER,
+    TESS_EVALUATION_SHADER,
+    GEOMETRY_SHADER,
+    FRAGMENT_SHADER,
+    COMPUTE_SHADER,
+    COUNT,
 };
 
 class Shader
@@ -38,4 +40,5 @@ class Shader
     GLuint m_shaderId;
     std::string m_error;
 };
+}
 }
