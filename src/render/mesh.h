@@ -37,5 +37,15 @@ ParseObj(std::basic_istream<char>& is, Mesh& mesh);
 
 void
 MakeCube(Mesh& mesh);
+
+void
+MakeTorus(Mesh& mesh,
+          float innerRadius = 0.5,
+          float outerRadius = 1.0,
+          int latSegs = 20,
+          int longSegs = 20);
+
+void
+MakeSphere(Mesh& mesh, int latitudeSegments = 20, int longitudeSegments = 20);
 }
 }

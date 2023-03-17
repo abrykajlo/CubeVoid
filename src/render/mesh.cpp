@@ -6,6 +6,10 @@
 
 #include "mesh.h"
 
+#include <core/math.h>
+
+#include <glm/gtx/rotate_vector.hpp>
+
 #include <algorithm>
 #include <istream>
 
@@ -32,7 +36,8 @@ Mesh::Init()
                  &m_vertices[0],
                  GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, v));
+    glVertexAttribPointer(
+        0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, v));
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(
@@ -194,14 +199,14 @@ cv::render::MakeCube(Mesh& mesh)
     for (size_t face = 0; face < k_cube_faces; face++) {
         int base_index = face * k_vertices_per_face;
 
-        vertices.emplace_back(Vertex{
-            cube_points[base_index + 0], cube_normals[face] });
-        vertices.emplace_back(Vertex{
-            cube_points[base_index + 1], cube_normals[face] });
-        vertices.emplace_back(Vertex{
-            cube_points[base_index + 2], cube_normals[face] });
-        vertices.emplace_back(Vertex{
-            cube_points[base_index + 3], cube_normals[face] });
+        vertices.emplace_back(
+            Vertex{ cube_points[base_index + 0], cube_normals[face] });
+        vertices.emplace_back(
+            Vertex{ cube_points[base_index + 1], cube_normals[face] });
+        vertices.emplace_back(
+            Vertex{ cube_points[base_index + 2], cube_normals[face] });
+        vertices.emplace_back(
+            Vertex{ cube_points[base_index + 3], cube_normals[face] });
     }
 
     std::vector<GLuint> indices;
@@ -222,4 +227,135 @@ cv::render::MakeCube(Mesh& mesh)
 
     mesh.add_indices(std::move(indices));
     mesh.add_vertices(std::move(vertices));
+}
+
+void
+cv::render::MakeTorus(Mesh& mesh,
+                      float innerRadius,
+                      float outerRadius,
+                      int latSegs,
+                      int longSegs)
+{
+    const float latSegAngle = 2.f * M_PI / latSegs;
+    const float longSegAngle = 2.f * M_PI / longSegs;
+    const float centerRadius = (outerRadius + innerRadius) / 2;
+    const float crossSectionRadius = (outerRadius - innerRadius) / 2;
+
+    std::vector<Vertex> vertices;
+    vertices.reserve(latSegs * longSegs);
+
+    // generate vertices
+    float longAngle = 0;
+    for (size_t i = 0; i < longSegs; i++) {
+        float latAngle = 0;
+        vec3 centerPoint(centerRadius * glm::cos(longAngle),
+                         0,
+                         centerRadius * glm::sin(longAngle));
+        for (size_t j = 0; j < latSegs; j++) {
+            Vertex v;
+
+            const float r = centerRadius + crossSectionRadius * glm::cos(latAngle);
+            v.v.x = r * glm::cos(longAngle);
+            v.v.y = crossSectionRadius * glm::sin(latAngle);
+            v.v.z = r * glm::sin(longAngle);
+
+            v.n = glm::normalize(v.v - centerPoint);
+
+            vertices.push_back(v);
+
+            latAngle += latSegAngle;
+        }
+        longAngle += longSegAngle;
+    }
+
+    std::vector<GLuint> indices;
+    indices.reserve(latSegs * longSegs * 6);
+
+    // generate indices
+    for (size_t i = 0; i < longSegs; i++) {
+        const int latRing = i * longSegs;
+        for (size_t j = 0; j < latSegs; j++) {
+            int bottomRight = latRing + j;
+            int topRight = latRing + (j + 1) % latSegs;
+            int bottomLeft = (bottomRight + latSegs) % vertices.size();
+            int topLeft = (topRight + latSegs) % vertices.size();
+
+            indices.push_back(bottomRight);
+            indices.push_back(topRight);
+            indices.push_back(topLeft);
+
+            indices.push_back(bottomRight);
+            indices.push_back(topLeft);
+            indices.push_back(bottomLeft);
+        }
+    }
+
+    mesh.add_vertices(std::move(vertices));
+    mesh.add_indices(std::move(indices));
+}
+
+void
+cv::render::MakeSphere(Mesh& mesh, int latSegs, int longSegs)
+{
+    const float latSegAngle = M_PI / latSegs;
+    const float longSegAngle = 2.f * M_PI / longSegs;
+
+    int numVertices = 2 + (latSegs - 2) * longSegs;
+    std::vector<Vertex> vertices;
+    vertices.reserve(numVertices);
+
+    // add North Pole
+    vec3 point(0, 1, 0);
+    vertices.emplace_back(Vertex{ point, point });
+
+    for (size_t i = 0; i < latSegs - 2; i++) {
+        point = glm::rotateZ(point, latSegAngle);
+        for (size_t j = 0; j < longSegs; j++) {
+            vertices.emplace_back(Vertex{ point, point });
+            point = glm::rotateY(point, longSegAngle);
+        }
+    }
+
+    // add South Pole
+    point = vec3(0, -1, 0);
+    vertices.emplace_back(Vertex{ point, point });
+
+    std::vector<GLuint> indices;
+    // add top triangles
+    for (size_t i = 1; i <= longSegs; i++) {
+        indices.push_back(i % longSegs + 1);
+        indices.push_back(0);
+        indices.push_back(i);
+    }
+
+    // add body
+    for (size_t i = 0; i < latSegs - 2; i++) {
+        const int firstTopLeft = 1 + i * longSegs;
+        for (size_t j = 0; j < longSegs; j++) {
+            int topLeft = firstTopLeft + j;
+            int topRight = firstTopLeft + (j + 1) % longSegs;
+            int bottomLeft = topLeft + longSegs;
+            int bottomRight = bottomLeft + 1;
+
+            indices.push_back(topLeft);
+            indices.push_back(bottomLeft);
+            indices.push_back(bottomRight);
+
+            indices.push_back(topLeft);
+            indices.push_back(bottomRight);
+            indices.push_back(topRight);
+        }
+    }
+
+    // add bottom triangles
+    int startOfBottom = numVertices - longSegs - 1;
+    for (size_t i = 0; i < longSegs; i++) {
+        indices.push_back(startOfBottom + i);
+        indices.push_back(numVertices - 1);
+        indices.push_back(startOfBottom + i + 1);
+    }
+
+    // add to mesh
+    mesh.add_vertices(std::move(vertices));
+    mesh.add_indices(std::move(indices));
 }

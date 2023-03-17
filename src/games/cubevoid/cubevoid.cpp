@@ -19,7 +19,7 @@ CubeVoidGame::Init()
     }
 
     // setup camera
-    glm::vec3 eye(1, 2, 2);
+    glm::vec3 eye(-2, 2, 1);
     glm::vec3 at(0, 0, 0);
     entt::handle camHandle(m_EnTTRegistry, m_EnTTRegistry.create());
     camHandle.emplace<cv::render::component::MainCamera>(
@@ -29,7 +29,7 @@ CubeVoidGame::Init()
     camHandle.emplace<cv::sim::component::Rotation>(
         glm::quatLookAt(glm::normalize(at - eye), glm::vec3(0, 1, 0)));
 
-    // setup cube
+    // setup sphere
     entt::handle cube(m_EnTTRegistry, m_EnTTRegistry.create());
 
     component::Material material;
@@ -37,7 +37,7 @@ CubeVoidGame::Init()
     cube.emplace<component::Material>(material);
 
     cv::render::Mesh mesh;
-    cv::render::MakeCube(mesh);
+    cv::render::MakeTorus(mesh);
     mesh.Init();
     cube.emplace<component::Mesh>(mesh);
 
