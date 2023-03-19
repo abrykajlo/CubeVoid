@@ -2,7 +2,7 @@ add_executable(CubeVoid main.cpp)
 
 target_link_libraries(
     CubeVoid
-    PRIVATE 
+    PRIVATE
         Engine
 )
 target_include_directories(CubeVoid PRIVATE ${INCLUDE_DIRS})

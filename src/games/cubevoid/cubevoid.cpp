@@ -29,17 +29,30 @@ CubeVoidGame::Init()
     camHandle.emplace<cv::sim::component::Rotation>(
         glm::quatLookAt(glm::normalize(at - eye), glm::vec3(0, 1, 0)));
 
-    // setup sphere
-    entt::handle cube(m_EnTTRegistry, m_EnTTRegistry.create());
+    // setup torus
+    entt::handle torus(m_EnTTRegistry, m_EnTTRegistry.create());
 
     component::Material material;
-    material.kd = vec3(1.0, 0.0, 0.0);
-    cube.emplace<component::Material>(material);
+    material.Ka = vec3(0.3, 0.0, 0.0);
+    material.Kd = vec3(1.0, 0.0, 0.0);
+    material.Ks = vec3(0.8, 0.8, 0.8);
+    torus.emplace<component::Material>(material);
 
     cv::render::Mesh mesh;
-    cv::render::MakeTorus(mesh);
+    cv::render::MakeTorus(mesh, 0.3f, 1.f, 30, 60);
     mesh.Init();
-    cube.emplace<component::Mesh>(mesh);
+    torus.emplace<component::Mesh>(mesh);
+
+    // setup lighting
+    entt::handle lightEntity(m_EnTTRegistry, m_EnTTRegistry.create());
+
+    component::Light light;
+    light.La = vec3(0.4);
+    light.Ld = vec3(0.8);
+    light.Ls = vec3(0.8);
+
+    lightEntity.emplace<component::Light>(light);
+    lightEntity.emplace<component::Position>(vec3(1, 1, 1));
 
     return 0;
 }

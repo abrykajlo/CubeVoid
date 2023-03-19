@@ -77,20 +77,6 @@ RenderManager::Init()
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
 
-    // DefaultReadFile meshFile;
-    // meshFile.Open("./assets/models/dragon.obj");
-
-    // auto size = meshFile.Size();
-    // char* fileContents = new char[size];
-    // meshFile.Read(fileContents, size);
-    // std::istringstream fileContentStream(std::string(fileContents, size));
-
-    // if (!Parse(fileContentStream, m_mesh)) {
-    //     m_log->Write("unable to parse file");
-    //     return -1;
-    // }
-    // delete[] fileContents;
-
     return 0;
 }
 
@@ -125,7 +111,48 @@ RenderManager::Render(const engine::Clock::DurationT& deltaTime)
         glm::mat3 normMat = glm::inverseTranspose(glm::mat3(view));
         glUniformMatrix3fv(2, 1, GL_FALSE, glm::value_ptr(normMat));
 
-        for (auto entity : m_EnTTRegistry.view<component::Mesh>()) {
+        // setup point light
+        for (auto entity :
+             m_EnTTRegistry
+                 .view<component::Light, sim::component::Position>()) {
+            auto& [light, pos] =
+                m_EnTTRegistry.get<component::Light, sim::component::Position>(
+                    entity);
+
+            GLuint La =
+                glGetUniformLocation(m_shaderProgram->GetId(), "Light.La");
+            GLuint Ld =
+                glGetUniformLocation(m_shaderProgram->GetId(), "Light.Ld");
+            GLuint Ls =
+                glGetUniformLocation(m_shaderProgram->GetId(), "Light.Ls");
+            GLuint Pos = glGetUniformLocation(m_shaderProgram->GetId(),
+                                              "Light.Position");
+
+            glUniform3fv(La, 1, glm::value_ptr(light.La));
+            glUniform3fv(Ld, 1, glm::value_ptr(light.Ld));
+            glUniform3fv(Ls, 1, glm::value_ptr(light.Ls));
+
+            // get position in camera space
+            glm::vec4 position = view * glm::vec4(pos.position, 1);
+            glUniform4fv(Pos, 1, glm::value_ptr(position));
+        }
+
+        for (auto entity :
+             m_EnTTRegistry.view<component::Mesh, component::Material>()) {
+            // set material uniforms before drawing
+            auto& material = m_EnTTRegistry.get<component::Material>(entity);
+
+            GLuint Ka =
+                glGetUniformLocation(m_shaderProgram->GetId(), "Material.Ka");
+            GLuint Kd =
+                glGetUniformLocation(m_shaderProgram->GetId(), "Material.Kd");
+            GLuint Ks =
+                glGetUniformLocation(m_shaderProgram->GetId(), "Material.Ks");
+
+            glUniform3fv(Ka, 1, glm::value_ptr(material.Ka));
+            glUniform3fv(Kd, 1, glm::value_ptr(material.Kd));
+            glUniform3fv(Ks, 1, glm::value_ptr(material.Ks));
+
             m_EnTTRegistry.get<component::Mesh>(entity).mesh.Draw();
         }
 
@@ -155,9 +182,9 @@ RenderManager::InitShaders()
     Shader fragShader(FRAGMENT_SHADER);
 
     // prepare shader sources
-    char buf[1024];
-    memset(buf, 0, 1024);
-    vertShaderFile.Read(buf, 1024);
+    char buf[2048];
+    memset(buf, 0, sizeof(buf));
+    vertShaderFile.Read(buf, sizeof(buf));
     vertShader.SetSource(buf);
     if (vertShader.Compile() < 0) {
         m_log->Write(vertShader.GetError());
@@ -165,8 +192,8 @@ RenderManager::InitShaders()
     }
     m_log->Write("Vertex Shader compiled successfully\n");
 
-    memset(buf, 0, 1024);
-    fragShaderFile.Read(buf, 1024);
+    memset(buf, 0, sizeof(buf));
+    fragShaderFile.Read(buf, sizeof(buf));
     fragShader.SetSource(buf);
     if (fragShader.Compile() < 0) {
         m_log->Write(fragShader.GetError());

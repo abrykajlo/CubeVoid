@@ -23,6 +23,12 @@ ShaderProgram::~ShaderProgram()
     }
 }
 
+GLuint
+cv::render::ShaderProgram::GetId()
+{
+    return m_programId;
+}
+
 int
 ShaderProgram::AttachShader(const Shader& shader)
 {

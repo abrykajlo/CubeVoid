@@ -273,7 +273,7 @@ cv::render::MakeTorus(Mesh& mesh,
 
     // generate indices
     for (size_t i = 0; i < longSegs; i++) {
-        const int latRing = i * longSegs;
+        const int latRing = i * latSegs;
         for (size_t j = 0; j < latSegs; j++) {
             int bottomRight = latRing + j;
             int topRight = latRing + (j + 1) % latSegs;

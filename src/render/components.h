@@ -12,11 +12,18 @@ struct MainCamera
     float zFar;
 };
 
+struct Light
+{
+    vec3 La;
+    vec3 Ld;
+    vec3 Ls;
+};
+
 struct Material
 {
-    vec3 kd;
-    vec3 ks;
-    vec3 ka;
+    vec3 Ka;
+    vec3 Kd;
+    vec3 Ks;
 };
 
 struct Mesh

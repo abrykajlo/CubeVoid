@@ -18,7 +18,8 @@ class ShaderProgram
   public:
     ShaderProgram();
     ~ShaderProgram();
-
+    
+    GLuint GetId();
     int AttachShader(const Shader& shader);
     int Link();
     void Use();
