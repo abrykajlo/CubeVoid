@@ -19,7 +19,7 @@ CubeVoidGame::Init()
     }
 
     // setup camera
-    glm::vec3 eye(-2, 2, 1);
+    glm::vec3 eye(2, 2, 1);
     glm::vec3 at(0, 0, 0);
     entt::handle camHandle(m_EnTTRegistry, m_EnTTRegistry.create());
     camHandle.emplace<cv::render::component::MainCamera>(
@@ -39,7 +39,7 @@ CubeVoidGame::Init()
     torus.emplace<component::Material>(material);
 
     cv::render::Mesh mesh;
-    cv::render::MakeTorus(mesh, 0.3f, 1.f, 30, 60);
+    cv::render::MakeTorus(mesh, 0.3f, 1.f, 50, 100);
     mesh.Init();
     torus.emplace<component::Mesh>(mesh);
 
