@@ -19,7 +19,7 @@ CubeVoidGame::Init()
     }
 
     // setup camera
-    glm::vec3 eye(2, 2, 1);
+    glm::vec3 eye(2, 2, 0);
     glm::vec3 at(0, 0, 0);
     entt::handle camHandle(m_EnTTRegistry, m_EnTTRegistry.create());
     camHandle.emplace<cv::render::component::MainCamera>(
@@ -32,11 +32,11 @@ CubeVoidGame::Init()
     // setup torus
     entt::handle torus(m_EnTTRegistry, m_EnTTRegistry.create());
 
-    component::Material material;
-    material.Ka = vec3(0.3, 0.0, 0.0);
-    material.Kd = vec3(1.0, 0.0, 0.0);
-    material.Ks = vec3(0.8, 0.8, 0.8);
-    torus.emplace<component::Material>(material);
+    component::PBRMaterial material;
+    material.Color = vec3(1.0, 0.0, 0.0);
+    material.Metal = false;
+    material.Roughness = 0.25;
+    torus.emplace<component::PBRMaterial>(material);
 
     cv::render::Mesh mesh;
     cv::render::MakeTorus(mesh, 0.3f, 1.f, 50, 100);
@@ -44,15 +44,29 @@ CubeVoidGame::Init()
     torus.emplace<component::Mesh>(mesh);
 
     // setup lighting
-    entt::handle lightEntity(m_EnTTRegistry, m_EnTTRegistry.create());
+    entt::handle lightEntity1(m_EnTTRegistry, m_EnTTRegistry.create());
 
-    component::Light light;
-    light.La = vec3(0.4);
-    light.Ld = vec3(0.8);
-    light.Ls = vec3(0.8);
+    component::PBRLight light1;
+    light1.L = vec3(0.2);
 
-    lightEntity.emplace<component::Light>(light);
-    lightEntity.emplace<component::Position>(vec3(1, 1, 1));
+    lightEntity1.emplace<component::PBRLight>(light1);
+    lightEntity1.emplace<component::Position>(vec3(-2, 0, 0));
+
+    /*entt::handle lightEntity2(m_EnTTRegistry, m_EnTTRegistry.create());
+
+    component::PBRLight light2;
+    light2.L = vec3(0.1);
+
+    lightEntity2.emplace<component::PBRLight>(light2);
+    lightEntity2.emplace<component::Position>(vec3(-1, -1, -1));*/
+
+    entt::handle lightEntity3(m_EnTTRegistry, m_EnTTRegistry.create());
+
+    component::PBRLight light3;
+    light3.L = vec3(0.5);
+
+    lightEntity3.emplace<component::PBRLight>(light3);
+    lightEntity3.emplace<component::Position>(vec3(1, 1, 1));
 
     return 0;
 }

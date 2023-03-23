@@ -112,46 +112,47 @@ RenderManager::Render(const engine::Clock::DurationT& deltaTime)
         glUniformMatrix3fv(2, 1, GL_FALSE, glm::value_ptr(normMat));
 
         // setup point light
-        for (auto entity :
-             m_EnTTRegistry
-                 .view<component::Light, sim::component::Position>()) {
+        const auto& lightView =
+            m_EnTTRegistry
+                .view<component::PBRLight, sim::component::Position>();
+        int i = 0;
+        for (const auto lightId : lightView) {
+            char buf[32];
+            sprintf(buf, "Light[%d].L", i);
+            GLuint L = glGetUniformLocation(m_shaderProgram->GetId(), buf);
+
+            sprintf(buf, "Light[%d].Position", i);
+            GLuint Pos = glGetUniformLocation(m_shaderProgram->GetId(), buf);
+
+            entt::handle lightEntity(m_EnTTRegistry, lightId);
             auto& [light, pos] =
-                m_EnTTRegistry.get<component::Light, sim::component::Position>(
-                    entity);
-
-            GLuint La =
-                glGetUniformLocation(m_shaderProgram->GetId(), "Light.La");
-            GLuint Ld =
-                glGetUniformLocation(m_shaderProgram->GetId(), "Light.Ld");
-            GLuint Ls =
-                glGetUniformLocation(m_shaderProgram->GetId(), "Light.Ls");
-            GLuint Pos = glGetUniformLocation(m_shaderProgram->GetId(),
-                                              "Light.Position");
-
-            glUniform3fv(La, 1, glm::value_ptr(light.La));
-            glUniform3fv(Ld, 1, glm::value_ptr(light.Ld));
-            glUniform3fv(Ls, 1, glm::value_ptr(light.Ls));
-
+                lightEntity
+                    .get<component::PBRLight, sim::component::Position>();
+            glUniform3fv(L, 1, glm::value_ptr(light.L));
             // get position in camera space
             glm::vec4 position = view * glm::vec4(pos.position, 1);
             glUniform4fv(Pos, 1, glm::value_ptr(position));
+
+            if (++i >= 3) {
+                break;
+            }
         }
 
         for (auto entity :
-             m_EnTTRegistry.view<component::Mesh, component::Material>()) {
+             m_EnTTRegistry.view<component::Mesh, component::PBRMaterial>()) {
             // set material uniforms before drawing
-            auto& material = m_EnTTRegistry.get<component::Material>(entity);
+            auto& material = m_EnTTRegistry.get<component::PBRMaterial>(entity);
 
-            GLuint Ka =
-                glGetUniformLocation(m_shaderProgram->GetId(), "Material.Ka");
-            GLuint Kd =
-                glGetUniformLocation(m_shaderProgram->GetId(), "Material.Kd");
-            GLuint Ks =
-                glGetUniformLocation(m_shaderProgram->GetId(), "Material.Ks");
+            GLuint Color = glGetUniformLocation(m_shaderProgram->GetId(),
+                                                "Material.Color");
+            GLuint Metal = glGetUniformLocation(m_shaderProgram->GetId(),
+                                                "Material.Metal");
+            GLuint Roughness = glGetUniformLocation(m_shaderProgram->GetId(),
+                                                    "Material.Roughness");
 
-            glUniform3fv(Ka, 1, glm::value_ptr(material.Ka));
-            glUniform3fv(Kd, 1, glm::value_ptr(material.Kd));
-            glUniform3fv(Ks, 1, glm::value_ptr(material.Ks));
+            glUniform3fv(Color, 1, glm::value_ptr(material.Color));
+            glUniform1i(Metal, material.Metal);
+            glUniform1f(Roughness, material.Roughness);
 
             m_EnTTRegistry.get<component::Mesh>(entity).mesh.Draw();
         }

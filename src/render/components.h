@@ -12,14 +12,26 @@ struct MainCamera
     float zFar;
 };
 
-struct Light
+struct PBRLight
+{
+    vec3 L;
+};
+
+struct PBRMaterial
+{
+    float Roughness;
+    bool Metal;
+    vec3 Color;
+};
+
+struct PhongLight
 {
     vec3 La;
     vec3 Ld;
     vec3 Ls;
 };
 
-struct Material
+struct PhongMaterial
 {
     vec3 Ka;
     vec3 Kd;
