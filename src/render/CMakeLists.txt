@@ -15,4 +15,4 @@ target_sources(Render
         shader.h
 )
 target_compile_features(Render PUBLIC cxx_std_17)
-target_link_libraries(Render PRIVATE $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>)
+target_link_libraries(Render PUBLIC $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>)

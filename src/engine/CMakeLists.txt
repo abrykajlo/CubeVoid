@@ -9,5 +9,5 @@ target_link_libraries(Engine
         Simulation
         Render
         glad::glad
-        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+        SDL2::SDL2main
 )
