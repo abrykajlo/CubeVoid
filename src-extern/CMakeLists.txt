@@ -34,6 +34,7 @@ target_include_directories(imgui INTERFACE ${imgui_SOURCE_DIR} ${SDL2_SOURCE_DIR
 target_sources(imgui
     INTERFACE
         ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         ${imgui_SOURCE_DIR}/imgui.cpp
         ${imgui_SOURCE_DIR}/imgui_draw.cpp
         ${imgui_SOURCE_DIR}/imgui_tables.cpp
