@@ -26,13 +26,14 @@ namespace engine {
 class Game
 {
   public:
+    Game();
+    virtual ~Game();
+    
     virtual int Init();
     virtual int Quit();
     virtual int Run();
 
   protected:
-    Game();
-    virtual ~Game();
     entt::registry m_EnTTRegistry;
 
   private:
