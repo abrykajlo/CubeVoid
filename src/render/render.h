@@ -8,6 +8,7 @@
 
 #include <engine/clock.h>
 #include <render/camera.h>
+#include <render/context.h>
 #include <render/mesh.h>
 
 #include <entt/entt.hpp>
@@ -20,15 +21,16 @@ namespace core {
 class Log;
 }
 namespace render {
+class Context;
 class ShaderProgram;
+class Window;
 class RenderManager
 {
   public:
-    RenderManager(entt::registry& registry);
+    RenderManager(const Window& window, entt::registry& registry);
     ~RenderManager();
 
     int Init();
-    int Quit();
 
     int Render(const engine::Clock::DurationT& deltaTime);
 
@@ -37,8 +39,7 @@ class RenderManager
     Camera GetMainCamera();
     float GetAspectRatio();
 
-    SDL_Window* m_window = nullptr;
-    SDL_GLContext m_context = nullptr;
+    const Window& m_window;
     std::unique_ptr<core::Log> m_log;
     std::unique_ptr<ShaderProgram> m_shaderProgram;
     entt::registry& m_EnTTRegistry;

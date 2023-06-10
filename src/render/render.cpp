@@ -11,6 +11,7 @@
 #include <core/math.h>
 #include <render/components.h>
 #include <render/shader_program.h>
+#include <render/window.h>
 #include <simulation/components.h>
 
 #include <entt/entt.hpp>
@@ -24,8 +25,9 @@
 
 using namespace cv::render;
 
-RenderManager::RenderManager(entt::registry& registry)
-    : m_EnTTRegistry(registry)
+RenderManager::RenderManager(const Window& window, entt::registry& registry)
+    : m_window(window)
+    , m_EnTTRegistry(registry)
 {}
 
 RenderManager::~RenderManager() {}
@@ -35,28 +37,8 @@ RenderManager::Init()
 {
     m_log = std::make_unique<core::Log>("RenderManager.log");
 
-    // open window
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-                        SDL_GL_CONTEXT_PROFILE_CORE);
-    m_window = SDL_CreateWindow("CubeVoid",
-                                SDL_WINDOWPOS_CENTERED,
-                                SDL_WINDOWPOS_CENTERED,
-                                640,
-                                480,
-                                SDL_WINDOW_OPENGL);
-    if (!m_window) {
-        return -1;
-    }
-
-    m_context = SDL_GL_CreateContext(m_window);
-    if (!m_context) {
-        return -1;
-    }
-
     SDL_GL_SetSwapInterval(1);
-    m_log->Write("GLFW Success\n");
+    m_log->Write("SDL Success\n");
     // init glew and check for success
     if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
         m_log->Write("GLAD failed to initialize\n");
@@ -81,17 +63,9 @@ RenderManager::Init()
 }
 
 int
-RenderManager::Quit()
-{
-    SDL_DestroyWindow(m_window);
-    return 0;
-}
-
-int
 RenderManager::Render(const engine::Clock::DurationT& deltaTime)
 {
     std::chrono::milliseconds thirtyFPS(33);
-    std::chrono::seconds secondsPerRotation(10);
 
     if (m_timeSinceLastRender >= thirtyFPS) {
         m_timeSinceLastRender = engine::Clock::DurationT(0);
@@ -157,7 +131,7 @@ RenderManager::Render(const engine::Clock::DurationT& deltaTime)
             m_EnTTRegistry.get<component::Mesh>(entity).mesh.Draw();
         }
 
-        SDL_GL_SwapWindow(m_window);
+        m_window.Swap();
     } else {
         m_timeSinceLastRender += deltaTime;
     }
@@ -243,8 +217,6 @@ RenderManager::GetMainCamera()
 float
 RenderManager::GetAspectRatio()
 {
-    int w;
-    int h;
-    SDL_GetWindowSize(m_window, &w, &h);
-    return (float)w / h;
+    Window::Size size = m_window.GetSize();
+    return (float)size.w / size.h;
 }

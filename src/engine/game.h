@@ -7,12 +7,12 @@
 #pragma once
 
 #include <engine/clock.h>
+#include <render/context.h>
+#include <render/window.h>
 
 #include <entt/entt.hpp>
 
 #include <memory>
-
-class SDL_Window;
 
 namespace cv {
 namespace render {
@@ -38,6 +38,8 @@ class Game
 
   private:
     Clock m_clock;
+    render::Window m_window;
+    std::unique_ptr<render::Context> m_context;
     std::unique_ptr<render::RenderManager> m_renderManager;
     std::unique_ptr<sim::SimulationManager> m_simulationManager;
 };
