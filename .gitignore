@@ -1,1 +1,6 @@
-_build
+*.sln
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+bin
+obj

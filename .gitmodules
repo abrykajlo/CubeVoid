@@ -1,3 +1,4 @@
-[submodule "vcpkg"]
-	path = vcpkg
-	url = https://github.com/Microsoft/vcpkg.git
+[submodule "src-extern/SDL"]
+	path = src-extern/SDL
+	url = git@github.com:libsdl-org/SDL.git
+	branch = SDL2
