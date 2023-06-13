@@ -1,3 +1,7 @@
-project "sdl2"
+project "SDL2"
     kind "StaticLib"
-    files { "SDL/src/**.c" }
+    files { 
+        "SDL/src/*.h",
+        "SDL/src/*.c", 
+    }
+    includedirs { "SDL/include", "SDL/src" }

@@ -4,3 +4,4 @@
 *.vcxproj.filters
 bin
 obj
+.vs

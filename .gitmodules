@@ -2,3 +2,15 @@
 	path = src-extern/SDL
 	url = git@github.com:libsdl-org/SDL.git
 	branch = SDL2
+[submodule "src-extern/entt"]
+	path = src-extern/entt
+	url = git@github.com:skypjack/entt.git
+[submodule "src-extern/glm"]
+	path = src-extern/glm
+	url = git@github.com:g-truc/glm.git
+[submodule "src-extern/Catch2"]
+	path = src-extern/Catch2
+	url = git@github.com:catchorg/Catch2.git
+[submodule "src-extern/imgui"]
+	path = src-extern/imgui
+	url = git@github.com:ocornut/imgui.git
