@@ -1,1 +1,9 @@
-_build
+*.log
+*.sln
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+bin
+obj
+Win32
+.vs

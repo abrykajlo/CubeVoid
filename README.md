@@ -1,3 +1,9 @@
 # Build Instructions
 
-Call `make build`
+## Windows
+
+Call `premake5 vs2022`
+
+## Linux
+
+Call `premake5 gmake`

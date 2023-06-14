@@ -2,7 +2,7 @@
 
 #include <render/texture.h>
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 namespace cv {
 namespace render {
