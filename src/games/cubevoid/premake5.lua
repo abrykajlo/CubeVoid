@@ -18,4 +18,14 @@ project "CubeVoid"
         "../../../src-extern/SDL/include",
     }
 
-    links { "SDL2" }
+    links { "glad", "SDL", "SDLmain", "Core", "Engine", "Simulation", "Render" }
+
+    debugdir "bin/Debug"
+
+    postbuildcommands {
+        "copy ..\\..\\..\\Win32\\Debug\\SDL2.dll bin\\Debug\\SDL2.dll",
+        "mkdir bin\\Debug\\assets",
+        "mkdir bin\\Debug\\assets\\shaders",
+        "copy ..\\..\\render\\shaders\\fragment.glsl bin\\Debug\\assets\\shaders\\fragment.glsl",
+        "copy ..\\..\\render\\shaders\\vertex.glsl bin\\Debug\\assets\\shaders\\vertex.glsl",
+    }

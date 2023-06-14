@@ -15,7 +15,7 @@
 #include <simulation/components.h>
 
 #include <entt/entt.hpp>
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -40,7 +40,7 @@ RenderManager::Init()
     SDL_GL_SetSwapInterval(1);
     m_log->Write("SDL Success\n");
     // init glew and check for success
-    if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
+    if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress)) {
         m_log->Write("GLAD failed to initialize\n");
         return -1;
     }

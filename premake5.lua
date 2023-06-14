@@ -7,9 +7,9 @@ group "Games"
 
 group "Engine"
     include "src/core"
-    include "src/engine"
     include "src/render"
     include "src/simulation"
+    include "src/engine"
 
 group "Tests"
 

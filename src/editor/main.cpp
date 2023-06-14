@@ -1,8 +1,7 @@
 #include <editor/editor.h>
-#undef main
 
 int
-main()
+main(int argc, char** argv)
 {
     cv::editor::Editor editor;
     if (editor.Init() < 0) {

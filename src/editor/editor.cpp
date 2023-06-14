@@ -5,7 +5,7 @@
 #include <SDL.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_sdl2.h>
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 using namespace cv::editor;
 
@@ -38,7 +38,7 @@ Editor::Init()
     m_texture = std::make_unique<render::Texture>(400, 400);
 
     SDL_GL_SetSwapInterval(1);
-    if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
+    if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress)) {
         return -1;
     }
 
