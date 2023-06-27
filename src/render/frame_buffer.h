@@ -1,22 +1,29 @@
 #pragma once
 
-#include <render/texture.h>
+#include <render/gl_object.h>
 
 #include <glad/gl.h>
 
 namespace cv {
 namespace render {
-class FrameBuffer
+class RenderBuffer;
+class Texture;
+class FrameBuffer : public GLObject<FrameBuffer>
 {
   public:
     FrameBuffer();
-    ~FrameBuffer();
+    virtual ~FrameBuffer();
 
     void AttachTexture(const Texture& tex);
-    void Bind();
+    void AttachDepthBuffer(const RenderBuffer& renderBuf);
+};
 
-private:
-    GLuint m_fbo = 0;
+template<>
+struct GLObjectTraits<FrameBuffer>
+{
+    static void gen(GLuint& id) { glGenFramebuffers(1, &id); }
+    static void del(const GLuint id) { glDeleteFramebuffers(1, &id); }
+    static void bind(const GLuint id) { glBindFramebuffer(GL_FRAMEBUFFER, id); }
 };
 }
 }

@@ -1,26 +1,37 @@
 #pragma once
 
+#include "gl_object.h"
+
+#include "rect.h"
+
 #include <glad/gl.h>
 
 #include <cstdint>
 
 namespace cv {
 namespace render {
-class Texture
+class Texture : public GLObject<Texture>
 {
   public:
-    Texture(size_t width, size_t height);
-    ~Texture();
+    Texture();
+    Texture(const Rect& rect);
+    virtual ~Texture();
 
-    void Bind() const;
-    GLuint GetId() const;
-    size_t GetWidth() const;
-    size_t GetHeight() const;
+    const Rect& GetRect();
+    void SetRect(const Rect& rect);
 
   private:
-    GLuint m_tid;
-    size_t m_width;
-    size_t m_height;
+    void UpdateStorage();
+
+    Rect m_rect;
+};
+
+template<>
+struct GLObjectTraits<Texture>
+{
+    static void gen(GLuint& id) { glGenTextures(1, &id); }
+    static void del(const GLuint id) { glDeleteTextures(1, &id); }
+    static void bind(const GLuint id) { glBindTexture(GL_TEXTURE_2D, id); }
 };
 }
 }

@@ -52,14 +52,6 @@ CubeVoidGame::Init()
     lightEntity1.emplace<component::PBRLight>(light1);
     lightEntity1.emplace<component::Position>(vec3(-2, 0, 0));
 
-    /*entt::handle lightEntity2(m_EnTTRegistry, m_EnTTRegistry.create());
-
-    component::PBRLight light2;
-    light2.L = vec3(0.1);
-
-    lightEntity2.emplace<component::PBRLight>(light2);
-    lightEntity2.emplace<component::Position>(vec3(-1, -1, -1));*/
-
     entt::handle lightEntity3(m_EnTTRegistry, m_EnTTRegistry.create());
 
     component::PBRLight light3;

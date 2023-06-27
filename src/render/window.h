@@ -1,5 +1,7 @@
 #pragma once
 
+#include "rect.h"
+
 #include <SDL.h>
 
 namespace cv {
@@ -12,13 +14,7 @@ class Window {
     int Init();
     void Swap() const;
     SDL_Window* Get() const;
-
-    struct Size
-    {
-        int w;
-        int h;
-    };
-    Size GetSize() const;
+    const Rect& GetRect() const;
 
   private:
     SDL_Window* m_window;

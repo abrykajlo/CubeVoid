@@ -46,7 +46,7 @@ RenderManager::Init()
     }
     m_log->Write("GLAD initialized\n");
 
-    glViewport(0, 0, 640, 480);
+    glViewport(0, 0, 400, 400);
     glClearColor(0.5, 0.5, 0.5, 1);
 
     if (InitShaders() < 0) {
@@ -217,6 +217,6 @@ RenderManager::GetMainCamera()
 float
 RenderManager::GetAspectRatio()
 {
-    Window::Size size = m_window.GetSize();
-    return (float)size.w / size.h;
+    const Rect& size = m_window.GetRect();
+    return (float)size.x / size.y;
 }

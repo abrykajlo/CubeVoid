@@ -41,10 +41,10 @@ Window::Get() const
     return m_window;
 }
 
-Window::Size
-Window::GetSize() const
+const Rect&
+Window::GetRect() const
 {
     int w, h;
     SDL_GetWindowSize(m_window, &w, &h);
-    return Size{ w, h };
+    return { w, h };
 }

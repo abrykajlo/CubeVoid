@@ -2,40 +2,37 @@
 
 using namespace cv::render;
 
-Texture::Texture(size_t width, size_t height)
-    : m_width(width)
-    , m_height(height)
+Texture::Texture()
+    : Texture({ 0, 0 })
 {
-    glGenTextures(1, &m_tid);
-    Bind();
-    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, m_width, m_height);
 }
 
-Texture::~Texture() {
-    glDeleteTextures(1, &m_tid);
+cv::render::Texture::Texture(const Rect& rect)
+    : m_rect(rect)
+{
+    UpdateStorage();
+}
+
+Texture::~Texture() {}
+
+const Rect&
+cv::render::Texture::GetRect()
+{
+    return m_rect;
 }
 
 void
-cv::render::Texture::Bind() const
+cv::render::Texture::SetRect(const Rect& rect)
 {
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, m_tid);
+    if (m_rect != rect) {
+        m_rect = rect;
+        UpdateStorage();
+    }
 }
 
-GLuint
-cv::render::Texture::GetId() const
+void
+cv::render::Texture::UpdateStorage()
 {
-    return m_tid;
-}
-
-size_t
-cv::render::Texture::GetWidth() const
-{
-    return m_width;
-}
-
-size_t
-cv::render::Texture::GetHeight() const
-{
-    return m_height;
+    Bind();
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, m_rect.x, m_rect.y);
 }
