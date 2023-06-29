@@ -24,14 +24,10 @@ cv::render::RenderBuffer::GetRect()
 void
 cv::render::RenderBuffer::SetRect(const Rect& rect)
 {
-    bool shouldUpdate = false;
-    if (m_rect == rect) {
-        shouldUpdate;
-    }
-
-    m_rect = rect;
-
-    if (shouldUpdate) {
+    if (m_rect != rect) {
+        m_rect = rect;
+        Delete();
+        Gen();
         UpdateStorage();
     }
 }

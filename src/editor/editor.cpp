@@ -67,11 +67,11 @@ Editor::EditorWindow()
     ImGui::Begin("Editor");
     const auto& contentSize = ImGui::GetContentRegionAvail();
     render::Rect rect(contentSize.x, contentSize.y);
-    if (m_texture->GetRect() != rect) {
-        m_texture->SetRect(rect);
-        m_renderBuffer = std::make_unique<render::RenderBuffer>(rect);
-        //m_renderBuffer->SetRect(rect);
-        m_frameBuffer = std::make_unique<render::FrameBuffer>();
+    m_texture->SetRect(rect);
+    if (m_renderBuffer->GetRect() != rect) {
+        m_renderBuffer->SetRect(rect);
+        m_frameBuffer->Delete();
+        m_frameBuffer->Gen();
         m_frameBuffer->AttachTexture(*m_texture);
         m_frameBuffer->AttachDepthBuffer(*m_renderBuffer);
     }
@@ -104,7 +104,7 @@ cv::editor::Editor::InitRendering()
     m_renderBuffer = std::make_unique<render::RenderBuffer>();
     m_frameBuffer->AttachTexture(*m_texture);
     m_frameBuffer->AttachDepthBuffer(*m_renderBuffer);
-    
+
     SDL_GL_SetSwapInterval(1);
     if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress)) {
         return -1;

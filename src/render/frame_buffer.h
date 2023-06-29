@@ -1,6 +1,6 @@
 #pragma once
 
-#include <render/gl_object.h>
+#include "gl_object.h"
 
 #include <glad/gl.h>
 

@@ -5,10 +5,7 @@
 
 using namespace cv::render;
 
-FrameBuffer::FrameBuffer()
-    : GLObject()
-{
-}
+FrameBuffer::FrameBuffer() {}
 
 FrameBuffer::~FrameBuffer() {}
 

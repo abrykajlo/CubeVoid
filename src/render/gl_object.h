@@ -11,14 +11,22 @@ struct GLObjectTraits
 template<class T>
 class GLObject
 {
-    using GenT = GLObjectTraits<T>;
+    using GLTraits = GLObjectTraits<T>;
 
   public:
-    GLObject() { GenT::gen(m_id); }
+    GLObject() { Gen(); }
 
-    virtual ~GLObject() { GenT::del(m_id); }
+    virtual ~GLObject() { Delete(); }
 
-    void Bind() const { GenT::bind(m_id); }
+    void Gen() { GLTraits::gen(m_id); }
+    void Bind() const { GLTraits::bind(m_id); }
+    void Delete()
+    {
+        if (m_id) {
+            GLTraits::del(m_id);
+        }
+        m_id = 0;
+    }
 
     GLuint GetId() const { return m_id; }
 
