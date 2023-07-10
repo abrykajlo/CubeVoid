@@ -6,13 +6,14 @@
 
 #pragma once
 
-#include <engine/clock.h>
+#include "clock.h"
+
+#include <render/context.h>
+#include <render/window.h>
 
 #include <entt/entt.hpp>
 
 #include <memory>
-
-class SDL_Window;
 
 namespace cv {
 namespace render {
@@ -26,17 +27,20 @@ namespace engine {
 class Game
 {
   public:
+    Game();
+    virtual ~Game();
+
     virtual int Init();
     virtual int Quit();
     virtual int Run();
 
   protected:
-    Game();
-    virtual ~Game();
     entt::registry m_EnTTRegistry;
 
   private:
     Clock m_clock;
+    render::Window m_window;
+    std::unique_ptr<render::Context> m_context;
     std::unique_ptr<render::RenderManager> m_renderManager;
     std::unique_ptr<sim::SimulationManager> m_simulationManager;
 };

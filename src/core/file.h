@@ -16,12 +16,12 @@ class File
 
     File(const char* fileName) { Open(fileName); }
 
-	~File() {
-		if (m_file.m_file != nullptr)
-		{
-			Close();
-		}
-	}
+    ~File()
+    {
+        if (m_file.m_file != nullptr) {
+            Close();
+        }
+    }
 
     int Open(const char* fileName) { return m_file.Open(fileName); }
 

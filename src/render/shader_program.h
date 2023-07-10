@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <render/shader.h>
+#include "shader.h"
 
 #include <array>
 #include <memory>

@@ -14,16 +14,20 @@ Game::~Game() {}
 int
 Game::Init()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (m_window.Init() < 0) {
         return -1;
     }
 
-    m_renderManager = std::make_unique<render::RenderManager>(m_EnTTRegistry);
+    m_context = std::make_unique<render::Context>(m_window, 4, 5);
+
+    m_renderManager =
+        std::make_unique<render::RenderManager>(m_window, m_EnTTRegistry);
     if (m_renderManager->Init() < 0) {
         return -1;
     }
 
-    m_simulationManager = std::make_unique<sim::SimulationManager>(m_EnTTRegistry);
+    m_simulationManager =
+        std::make_unique<sim::SimulationManager>(m_EnTTRegistry);
     if (m_simulationManager->Init() < 0) {
         return -1;
     }
@@ -37,10 +41,6 @@ Game::Quit()
     SDL_Quit();
 
     if (m_simulationManager->Quit() < 0) {
-        return -1;
-    }
-
-    if (m_renderManager->Quit() < 0) {
         return -1;
     }
     return 0;

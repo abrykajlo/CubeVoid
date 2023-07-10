@@ -1,8 +1,8 @@
 #pragma once
 
-#include <render/vertex.h>
+#include "vertex.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include <istream>
 #include <vector>

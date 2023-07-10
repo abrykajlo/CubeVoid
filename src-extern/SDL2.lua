@@ -1,0 +1,11 @@
+externalproject "SDL"
+    location "SDL/VisualC/SDL"
+    kind "StaticLib"
+    language "C"
+    uuid "84bdd620-0a27-11ee-b228-0800200c9a66"
+
+externalproject "SDLmain"
+    location "SDL/VisualC/SDLmain"
+    kind "StaticLib"
+    language "C"
+    uuid "4966a604-f7e0-4132-8e37-ad5471ab8c0e"
