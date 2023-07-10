@@ -114,7 +114,7 @@ RenderManager::Render(const engine::Clock::DurationT& deltaTime)
         }
 
         for (auto entity :
-             m_EnTTRegistry.view<component::Mesh, component::PBRMaterial>()) {
+             m_EnTTRegistry.view<component::Drawable, component::PBRMaterial>()) {
             // set material uniforms before drawing
             auto& material = m_EnTTRegistry.get<component::PBRMaterial>(entity);
 
@@ -129,7 +129,7 @@ RenderManager::Render(const engine::Clock::DurationT& deltaTime)
             glUniform1i(Metal, material.Metal);
             glUniform1f(Roughness, material.Roughness);
 
-            m_EnTTRegistry.get<component::Mesh>(entity).mesh.Draw();
+            m_EnTTRegistry.get<component::Drawable>(entity).drawable->Draw();
         }
 
         m_window.Swap();

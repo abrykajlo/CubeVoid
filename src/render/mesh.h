@@ -2,6 +2,8 @@
 
 #include "vertex.h"
 
+#include "drawable.h"
+
 #include <glad/gl.h>
 
 #include <istream>
@@ -9,7 +11,7 @@
 
 namespace cv {
 namespace render {
-class Mesh
+class Mesh : public IDrawable
 {
   public:
     Mesh();
@@ -18,7 +20,7 @@ class Mesh
     int Init();
     int Quit();
 
-    int Draw();
+    int Draw() override;
 
     void add_vertices(std::vector<Vertex>&& vs);
     void add_indices(std::vector<GLuint>&& is);

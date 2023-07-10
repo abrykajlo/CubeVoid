@@ -147,20 +147,6 @@ cv::editor::Editor::InitScene()
     camHandle.emplace<cv::sim::component::Rotation>(
         glm::quatLookAt(glm::normalize(at - eye), glm::vec3(0, 1, 0)));
 
-    // setup torus
-    entt::handle torus(m_entityRegistry, m_entityRegistry.create());
-
-    cv::render::component::PBRMaterial material;
-    material.Color = vec3(1.0, 0.0, 0.0);
-    material.Metal = false;
-    material.Roughness = 0.25;
-    torus.emplace<cv::render::component::PBRMaterial>(material);
-
-    cv::render::Mesh mesh;
-    cv::render::MakeTorus(mesh, 0.3f, 1.f, 50, 100);
-    mesh.Init();
-    torus.emplace<cv::render::component::Mesh>(mesh);
-
     // setup lighting
     entt::handle lightEntity1(m_entityRegistry, m_entityRegistry.create());
 

@@ -38,9 +38,9 @@ struct PhongMaterial
     vec3 Ks;
 };
 
-struct Mesh
+struct Drawable
 {
-    render::Mesh mesh;
+    std::unique_ptr<render::IDrawable> drawable;
 };
 
 struct Scale

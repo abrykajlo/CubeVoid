@@ -38,10 +38,10 @@ CubeVoidGame::Init()
     material.Roughness = 0.25;
     torus.emplace<component::PBRMaterial>(material);
 
-    cv::render::Mesh mesh;
-    cv::render::MakeTorus(mesh, 0.3f, 1.f, 50, 100);
-    mesh.Init();
-    torus.emplace<component::Mesh>(mesh);
+    auto mesh = std::make_unique<cv::render::Mesh>();
+    cv::render::MakeTorus(*mesh, 0.3f, 1.f, 50, 100);
+    mesh->Init();
+    torus.emplace<component::Drawable>(std::move(mesh));
 
     // setup lighting
     entt::handle lightEntity1(m_EnTTRegistry, m_EnTTRegistry.create());
@@ -69,10 +69,5 @@ CubeVoidGame::Quit()
     int result = Game::Quit();
     if (result < 0) {
         return result;
-    }
-
-    for (auto entity : m_EnTTRegistry.view<component::Mesh>()) {
-        auto& mesh = m_EnTTRegistry.get<component::Mesh>(entity);
-        mesh.mesh.Quit();
     }
 }
