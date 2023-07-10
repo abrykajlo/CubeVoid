@@ -1,6 +1,6 @@
 #pragma once
 
-#include <render/vertex.h>
+#include "vertex.h"
 
 #include <glad/gl.h>
 

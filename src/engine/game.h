@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include <engine/clock.h>
+#include "clock.h"
+
 #include <render/context.h>
 #include <render/window.h>
 
@@ -28,7 +29,7 @@ class Game
   public:
     Game();
     virtual ~Game();
-    
+
     virtual int Init();
     virtual int Quit();
     virtual int Run();

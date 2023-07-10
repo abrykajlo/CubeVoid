@@ -6,10 +6,11 @@
 
 #pragma once
 
+#include "camera.h"
+#include "context.h"
+#include "mesh.h"
+
 #include <engine/clock.h>
-#include <render/camera.h>
-#include <render/context.h>
-#include <render/mesh.h>
 
 #include <entt/entt.hpp>
 #include <SDL.h>

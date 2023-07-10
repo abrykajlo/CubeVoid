@@ -254,7 +254,8 @@ cv::render::MakeTorus(Mesh& mesh,
         for (size_t j = 0; j < latSegs; j++) {
             Vertex v;
 
-            const float r = centerRadius + crossSectionRadius * glm::cos(latAngle);
+            const float r =
+                centerRadius + crossSectionRadius * glm::cos(latAngle);
             v.v.x = r * glm::cos(longAngle);
             v.v.y = crossSectionRadius * glm::sin(latAngle);
             v.v.z = r * glm::sin(longAngle);

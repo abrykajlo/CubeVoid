@@ -1,6 +1,5 @@
 ---
 Language:        Cpp
-# BasedOnStyle:  Mozilla
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
@@ -60,14 +59,16 @@ ForEachMacros:
   - foreach
   - Q_FOREACH
   - BOOST_FOREACH
-IncludeBlocks:   Preserve
+IncludeBlocks:   Regroup
 IncludeCategories: 
-  - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'
+  - Regex:           '^"'
+    Priority:        1
+  - Regex:           '^<(core|editor|engine|games|render|simulation)/'
     Priority:        2
-  - Regex:           '^(<|"(gtest|gmock|isl|json)/)'
+  - Regex:           '^<.*/'
     Priority:        3
   - Regex:           '.*'
-    Priority:        1
+    Priority:        4
 IncludeIsMainRegex: '(Test)?$'
 IndentCaseLabels: true
 IndentPPDirectives: None

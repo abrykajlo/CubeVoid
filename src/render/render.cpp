@@ -6,12 +6,13 @@
 
 #include "render.h"
 
+#include "components.h"
+#include "shader_program.h"
+#include "window.h"
+
 #include <core/file.h>
 #include <core/log.h>
 #include <core/math.h>
-#include <render/components.h>
-#include <render/shader_program.h>
-#include <render/window.h>
 #include <simulation/components.h>
 
 #include <entt/entt.hpp>
