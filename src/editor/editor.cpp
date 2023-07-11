@@ -1,12 +1,14 @@
 #include "editor.h"
 
 #include <render/components.h>
+#include <render/point_sprites.h>
 #include <simulation/components.h>
 
-#include <SDL.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_sdl2.h>
 #include <glad/gl.h>
+
+#include <SDL.h>
 
 using namespace cv::editor;
 
