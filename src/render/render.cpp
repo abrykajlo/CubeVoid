@@ -7,7 +7,7 @@
 #include "render.h"
 
 #include "components.h"
-#include "shader_program.h"
+#include "gl/shader_program.h"
 #include "window.h"
 
 #include <core/file.h>
@@ -154,8 +154,8 @@ RenderManager::InitShaders()
         return -1;
     }
 
-    Shader vertShader(VERTEX_SHADER);
-    Shader fragShader(FRAGMENT_SHADER);
+    gl::Shader<gl::ShaderType::VERTEX> vertShader;
+    gl::Shader<gl::ShaderType::FRAGMENT> fragShader;
 
     // prepare shader sources
     char buf[2048];
@@ -163,7 +163,7 @@ RenderManager::InitShaders()
     vertShaderFile.Read(buf, sizeof(buf));
     vertShader.SetSource(buf);
     if (vertShader.Compile() < 0) {
-        m_log->Write(vertShader.GetError());
+        m_log->Write(vertShader.GetError().c_str());
         return -1;
     }
     m_log->Write("Vertex Shader compiled successfully\n");
@@ -172,17 +172,17 @@ RenderManager::InitShaders()
     fragShaderFile.Read(buf, sizeof(buf));
     fragShader.SetSource(buf);
     if (fragShader.Compile() < 0) {
-        m_log->Write(fragShader.GetError());
+        m_log->Write(fragShader.GetError().c_str());
         return -1;
     }
     m_log->Write("Fragment Shader compiled successfully\n");
 
     // set up shaderprogram
-    m_shaderProgram = std::make_unique<ShaderProgram>();
+    m_shaderProgram = std::make_unique<gl::ShaderProgram>();
     m_shaderProgram->AttachShader(vertShader);
     m_shaderProgram->AttachShader(fragShader);
     if (m_shaderProgram->Link() < 0) {
-        m_log->Write(m_shaderProgram->GetError());
+        m_log->Write(m_shaderProgram->GetError().c_str());
         return -1;
     }
     m_log->Write("Shader program linked successfully\n");

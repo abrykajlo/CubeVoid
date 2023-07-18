@@ -1,15 +1,14 @@
 #pragma once
 
-#include "gl_object.h"
+#include "gl.h"
 
-#include "rect.h"
-
-#include <glad/gl.h>
+#include "../rect.h"
 
 #include <cstdint>
 
 namespace cv {
 namespace render {
+namespace gl {
 class Texture : public GLObject<Texture>
 {
   public:
@@ -27,11 +26,12 @@ class Texture : public GLObject<Texture>
 };
 
 template<>
-struct GLObjectTraits<Texture>
+struct GLTraits<Texture>
 {
     static void gen(GLuint& id) { glGenTextures(1, &id); }
     static void del(const GLuint id) { glDeleteTextures(1, &id); }
     static void bind(const GLuint id) { glBindTexture(GL_TEXTURE_2D, id); }
 };
+}
 }
 }

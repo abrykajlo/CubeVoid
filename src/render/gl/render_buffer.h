@@ -1,13 +1,12 @@
 #pragma once
 
-#include "gl_object.h"
+#include "gl.h"
 
-#include "rect.h"
-
-#include <glad/gl.h>
+#include "../rect.h"
 
 namespace cv {
 namespace render {
+namespace gl {
 class RenderBuffer : public GLObject<RenderBuffer>
 {
   public:
@@ -25,7 +24,7 @@ class RenderBuffer : public GLObject<RenderBuffer>
 };
 
 template<>
-struct GLObjectTraits<RenderBuffer>
+struct GLTraits<RenderBuffer>
 {
     static void gen(GLuint& id) { glGenRenderbuffers(1, &id); }
     static void del(const GLuint id) { glDeleteRenderbuffers(1, &id); }
@@ -34,5 +33,6 @@ struct GLObjectTraits<RenderBuffer>
         glBindRenderbuffer(GL_RENDERBUFFER, id);
     }
 };
+}
 }
 }

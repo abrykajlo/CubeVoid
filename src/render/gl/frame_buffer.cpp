@@ -3,7 +3,7 @@
 #include "render_buffer.h"
 #include "texture.h"
 
-using namespace cv::render;
+using namespace cv::render::gl;
 
 FrameBuffer::FrameBuffer() {}
 

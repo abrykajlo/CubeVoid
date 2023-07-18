@@ -1,6 +1,6 @@
 #include "render_buffer.h"
 
-using namespace cv::render;
+using namespace cv::render::gl;
 
 RenderBuffer::RenderBuffer()
     : RenderBuffer({ 0, 0 })
@@ -15,14 +15,14 @@ RenderBuffer::RenderBuffer(const Rect& rect)
 
 RenderBuffer::~RenderBuffer() {}
 
-const Rect&
-cv::render::RenderBuffer::GetRect()
+const cv::render::Rect&
+RenderBuffer::GetRect()
 {
     return m_rect;
 }
 
 void
-cv::render::RenderBuffer::SetRect(const Rect& rect)
+RenderBuffer::SetRect(const Rect& rect)
 {
     if (m_rect != rect) {
         m_rect = rect;
@@ -33,7 +33,7 @@ cv::render::RenderBuffer::SetRect(const Rect& rect)
 }
 
 void
-cv::render::RenderBuffer::UpdateStorage()
+RenderBuffer::UpdateStorage()
 {
     Bind();
     glRenderbufferStorage(

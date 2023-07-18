@@ -99,9 +99,9 @@ cv::editor::Editor::InitRendering()
     if (m_renderManager->Init() < 0) {
         return -1;
     }
-    m_frameBuffer = std::make_unique<render::FrameBuffer>();
-    m_texture = std::make_unique<render::Texture>();
-    m_renderBuffer = std::make_unique<render::RenderBuffer>();
+    m_frameBuffer = std::make_unique<render::gl::FrameBuffer>();
+    m_texture = std::make_unique<render::gl::Texture>();
+    m_renderBuffer = std::make_unique<render::gl::RenderBuffer>();
     m_frameBuffer->AttachTexture(*m_texture);
     m_frameBuffer->AttachDepthBuffer(*m_renderBuffer);
 

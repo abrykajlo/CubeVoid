@@ -1,11 +1,10 @@
 #pragma once
 
-#include "gl_object.h"
-
-#include <glad/gl.h>
+#include "gl.h"
 
 namespace cv {
 namespace render {
+namespace gl {
 class RenderBuffer;
 class Texture;
 class FrameBuffer : public GLObject<FrameBuffer>
@@ -19,11 +18,12 @@ class FrameBuffer : public GLObject<FrameBuffer>
 };
 
 template<>
-struct GLObjectTraits<FrameBuffer>
+struct GLTraits<FrameBuffer>
 {
     static void gen(GLuint& id) { glGenFramebuffers(1, &id); }
     static void del(const GLuint id) { glDeleteFramebuffers(1, &id); }
     static void bind(const GLuint id) { glBindFramebuffer(GL_FRAMEBUFFER, id); }
 };
+}
 }
 }

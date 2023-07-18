@@ -13,8 +13,8 @@
 #include <engine/clock.h>
 
 #include <entt/entt.hpp>
-#include <SDL.h>
 
+#include <SDL.h>
 #include <memory>
 
 namespace cv {
@@ -22,8 +22,11 @@ namespace core {
 class Log;
 }
 namespace render {
-class Context;
+namespace gl {
 class ShaderProgram;
+}
+
+class Context;
 class Window;
 class RenderManager
 {
@@ -42,7 +45,7 @@ class RenderManager
 
     const Window& m_window;
     std::unique_ptr<core::Log> m_log;
-    std::unique_ptr<ShaderProgram> m_shaderProgram;
+    std::unique_ptr<gl::ShaderProgram> m_shaderProgram;
     entt::registry& m_EnTTRegistry;
     engine::Clock::DurationT m_timeSinceLastRender;
 };

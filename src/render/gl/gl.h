@@ -4,14 +4,24 @@
 
 namespace cv {
 namespace render {
+namespace gl {
+template<class E, E e>
+static const GLenum k_glEnum = static_assert(false, "Not implemented.");
+
+#define GL_ENUM_MAP(ENUM, GL) \
+    template<> \
+    static const GLenum k_glEnum<decltype(ENUM), ENUM> = GL;
+
+#define GL_ENUM_CAST(ENUM) k_glEnum<decltype(ENUM), ENUM>
+    
 template<class T>
-struct GLObjectTraits
+struct GLTraits
 {};
 
 template<class T>
 class GLObject
 {
-    using GLTraits = GLObjectTraits<T>;
+    using GLTraits = GLTraits<T>;
 
   public:
     GLObject() { Gen(); }
@@ -33,5 +43,6 @@ class GLObject
   protected:
     GLuint m_id = 0;
 };
+}
 }
 }

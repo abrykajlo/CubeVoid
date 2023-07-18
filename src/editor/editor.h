@@ -1,10 +1,10 @@
 #pragma once
 
 #include <engine/clock.h>
-#include <render/frame_buffer.h>
+#include <render/gl/frame_buffer.h>
 #include <render/render.h>
-#include <render/render_buffer.h>
-#include <render/texture.h>
+#include <render/gl/render_buffer.h>
+#include <render/gl/texture.h>
 #include <render/window.h>
 
 #include <entt/entt.hpp>
@@ -36,9 +36,9 @@ class Editor
     std::unique_ptr<render::Context> m_context;
     std::unique_ptr<render::RenderManager> m_renderManager;
     engine::Clock m_clock;
-    std::unique_ptr<render::Texture> m_texture;
-    std::unique_ptr<render::FrameBuffer> m_frameBuffer;
-    std::unique_ptr<render::RenderBuffer> m_renderBuffer;
+    std::unique_ptr<render::gl::Texture> m_texture;
+    std::unique_ptr<render::gl::FrameBuffer> m_frameBuffer;
+    std::unique_ptr<render::gl::RenderBuffer> m_renderBuffer;
 };
 }
 }
